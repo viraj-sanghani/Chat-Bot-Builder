@@ -1,0 +1,125 @@
+What we are trying to build :
+	=> Lead generation or Menu-based chatbot
+
+Flow : 
+	Landing page => Register => Admin panel
+					Login => Admin panel
+
+Admin panel features :
+ 	Dashboard (admin, agent)
+	Register(admin), Login, Forgot, ChangePassword (admin, agent)
+	Profile, Settings (admin, agent)
+	Agent Manage (admin)
+	Manage Questions (admin)
+	Customers View (admin, agent)
+	Live chat (admin, agent)
+	ChatBot Manage (admin)
+
+Master admin panel features :
+	Dashboard
+	Clients Manage
+
+Live chat feature :
+	=> user start live chat => agents get notification => agent accept request and start chatting
+	=> switch agent feature
+
+
+Tables :
+	admin
+	clients
+	agents
+	users
+	chatbots
+	chats
+	rooms
+
+
+In chatbot table :
+
+	menu: [
+		{id: 1, mes: "Welcome 😜", next: 2, wait: false, valid: "email"},
+		{id: 2,
+			mes: "How are you?", 
+			opt: [
+				{val: "Fine", next: 1 },
+				{val: "Fine", next: 3 }
+			]
+		},
+		{id: 3, mes: "Thank you", wait: false, end: true}
+		]
+
+	menu => valid: email, mobile, number
+
+
+API Endpoints :
+
+	admin/
+		auth/
+			login
+		clients/
+			add
+			edit
+			delete
+			list
+
+	auth/
+		register
+		login
+		forgotPassword
+		resetPassword
+		changePassword
+		profileInfo
+		editProfile
+		verifyEmail
+	agents/
+		add
+		edit
+		delete/:agentId
+		list
+		info/:agentId
+	users/
+		delete/:userId
+		list
+		info/:userId
+	chatbots/
+		add
+		edit
+		delete/:botId
+		list
+		info/:botId
+	chats/
+		delete
+		list/:userId
+	rooms/
+		add
+		edit
+
+	
+Documentation :
+
+
+1.7 Assumptions and Constraints :
+
+2.1 Requirement Determination
+
+2.2 Targeted Users
+
+5. Agile
+
+	5.1 Agile Project Charter
+
+	5.2.Agile Roadmap / Schedule
+		
+	5.3.Agile Project Plan
+		
+	5.4.Agile User Story
+		
+	5.5.Agile Release Plan
+		
+	5.6.Agile Sprint Backlog
+		
+	5.7.Agile Test Plan	
+
+6. Proposed Enhancements
+
+7. Conclusion

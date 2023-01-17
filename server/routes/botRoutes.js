@@ -1,0 +1,26 @@
+const express = require("express");
+const router = express.Router();
+const {
+  bots,
+  botAdd,
+  botEdit,
+  botMenuEdit,
+  botInfo,
+  botMenu,
+  botDelete,
+  iconImg,
+} = require("../controllers/botController");
+const { userAuth } = require("../middlewares/auth");
+const { botIcon } = require("../middlewares/multer");
+const { asyncTryCatch } = require("../middlewares/async");
+
+router.get("/", userAuth, asyncTryCatch(bots));
+router.post("/add", userAuth, botIcon, asyncTryCatch(botAdd));
+router.put("/edit", userAuth, botIcon, asyncTryCatch(botEdit));
+router.put("/menu/edit", userAuth, asyncTryCatch(botMenuEdit));
+router.get("/info/:id", userAuth, asyncTryCatch(botInfo));
+router.get("/menu/:id", userAuth, asyncTryCatch(botMenu));
+router.delete("/delete/:botId", userAuth, asyncTryCatch(botDelete));
+router.get("/icon/:name", asyncTryCatch(iconImg));
+
+module.exports = router;

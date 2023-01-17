@@ -1,0 +1,11 @@
+export const SIGNUP = "SIGNUP";
+export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
+export const SIGNUP_FAIL = "SIGNUP_FAIL";
+export const SIGNIN = "SIGNIN";
+export const SIGNIN_SUCCESS = "SIGNIN_SUCCESS";
+export const SIGNIN_FAIL = "SIGNIN_FAIL";
+export const AUTHENTICATED = "AUTHENTICATED";
+export const SIGNOUT = "SIGNOUT";
+export const LOADING = "LOADING";
+export const AUTH_DATA = "auth_data";
+export const AUTH_TOKEN = "auth_token";

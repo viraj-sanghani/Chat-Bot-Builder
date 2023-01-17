@@ -1,0 +1,20 @@
+const express = require("express");
+const router = express.Router();
+// const adminRoutes = require("./adminRouter");
+const authRoutes = require("./authRoutes");
+const agentRoutes = require("./agentRoutes");
+const botRoutes = require("./botRoutes");
+const chatRoutes = require("./chatRoutes");
+const userRoutes = require("./userRoutes");
+const roomRoutes = require("./roomRoutes");
+const reportRoutes = require("./reportRoutes");
+
+// router.use("/admin", adminRoutes);
+router.use("/auth", authRoutes);
+router.use("/agent", agentRoutes);
+router.use("/bot", botRoutes);
+router.use("/chat", chatRoutes);
+router.use("/user", userRoutes);
+router.use("/room", roomRoutes);
+router.use("/report", reportRoutes);
+module.exports = router;

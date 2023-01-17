@@ -1,0 +1,22 @@
+.bots-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-around; */
+}
+.color-picker-box {
+  height: 30px;
+  width: 100px;
+  border-radius: 5px;
+  border: 2px solid rgb(238, 238, 238);
+  cursor: pointer;
+}
+.color-picker-wrap {
+  position: absolute;
+  z-index: 1;
+}
+.bots-wrap .ant-card-body {
+  padding: 0 !important;
+}
+.bots-wrap .ant-card-meta-title {
+  color: #eee !important;
+}

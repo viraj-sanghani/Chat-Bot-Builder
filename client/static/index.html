@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="http://localhost:3000/static/css/style.css" />
+  </head>
+  <body>
+    <div class="chat-popup align-right d-none">
+      <div class="chat-header">
+        <div class="img-wrap">
+          <img src="./img/default.gif" alt="" />
+        </div>
+        <h2>ChatBot</h2>
+        <div class="bot-close-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#000000"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>
+      </div>
+      <div class="chat-container">
+        <div class="chat-left">
+          <div class="chat-icon">
+            <img src="./img/customer.png" atl="" />
+          </div>
+          <div class="chat-mes bg">Hi, it's great to see you! 👋</div>
+        </div>
+        <div class="chat-left">
+          <div class="chat-icon">
+            <img src="./img/customer.png" atl="" />
+          </div>
+          <div class="chat-mes bg">How are you?</div>
+        </div>
+        <div class="chat-right">
+          <div class="chat-icon">
+            <img src="./img/customer.png" atl="" />
+          </div>
+          <div class="chat-mes bg">Fine</div>
+        </div>
+        <div class="chat-right">
+          <div class="chat-icon">
+            <img src="./img/customer.png" atl="" />
+          </div>
+          <div class="chat-mes bg">Fine</div>
+        </div>
+        <div class="chat-right">
+          <div class="chat-bot-loading-text"></div>
+        </div>
+      </div>
+      <div class="chat-footer">
+        <input
+          type="text"
+          class="chat-text-box"
+          id="messageChatInput"
+          placeholder="Type your message here"
+        />
+        <button class="send-btn" id="send">
+          <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+          </svg>
+        </button>
+      </div>
+      <div class="pow-wrap">
+        Powerd by
+        <a href="https://quickconnect.com/" target="blank">QuickConnect</a>
+      </div>
+    </div>
+    <div class="chat-popup-btn-wrap">
+      <div class="chat-popup-btn">
+        <img class="close-popup-icon" src="./img/default_btn.gif" alt="" />
+
+        <div class="open-popup-icon d-none">
+          <svg style="width: 30px; height: 30px" viewBox="0 0 24 24">
+            <path
+              fill="currentColor"
+              d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const bot = document.getElementsByClassName("chat-popup")[0];
+      const openBtn = document.getElementsByClassName("chat-popup-btn-wrap")[0];
+      const closeBtn = document.getElementsByClassName("bot-close-btn")[0];
+      openBtn.addEventListener("click", () => {
+        bot.classList.remove("d-none");
+        openBtn.classList.add("d-none");
+      });
+      closeBtn.addEventListener("click", () => {
+        bot.classList.add("d-none");
+        openBtn.classList.remove("d-none");
+      });
+    </script>
+  </body>
+</html>
