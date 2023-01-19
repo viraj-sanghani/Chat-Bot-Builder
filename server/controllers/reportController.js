@@ -1,49 +1,46 @@
-const users = require("../models/users");
-const chatbots = require("../models/chatbots");
-const chats = require("../models/chats");
-const rooms = require("../models/rooms");
-const agents = require("../models/agents");
 const moment = require("moment");
+const { find } = require("../config/db");
 
 const getLivechat = (start, end, id) => {
   return new Promise(async (resolve) => {
-    const chat = await rooms
-      .find({
+    const chat = /* await find("rooms",{
         createdAt: { $gte: start, $lt: end },
         botId: id,
-      })
-      .count();
+      }) */ 5;
+
     resolve(chat);
   });
 };
 
 const getUsers = (start, end, id) => {
   return new Promise(async (resolve) => {
-    const u = await users
+    const u = /* await users
       .find({
         createdAt: { $gte: start, $lt: end },
         botId: id,
       })
-      .count();
+      .count(); */ 5;
     resolve(u);
   });
 };
 
 const getAgents = (id) => {
   return new Promise(async (resolve) => {
-    const data = await agents
-      .find({
+    const data = await find(
+      "agents",
+      {
         clientId: id,
-        role: { $not: { $eq: "Admin" } },
-      })
-      .select("fullName picture gender");
+        role: "User",
+      },
+      "fullName picture gender"
+    );
     resolve(data);
   });
 };
 
 const getLastUsed = (id) => {
   return new Promise(async (resolve) => {
-    const chat = await chats
+    /* const chat = await chats
       .findOne({
         botId: id,
       })
@@ -51,20 +48,21 @@ const getLastUsed = (id) => {
       .select("createdAt");
     resolve(
       chat?.createdAt ? moment(chat?.createdAt).format("lll") : "Not Used"
-    );
+    ); */
+    resolve(moment().format("lll"));
   });
 };
 
 const getChats = async (id) => {
   return new Promise(async (resolve) => {
-    const chat = await chats.aggregate([
+    const chat = /* await chats.aggregate([
       {
         $group: {
           agentId: { source: "$source", status: "$status" },
           count: { $sum: 1 },
         },
       },
-    ]);
+    ]); */ 5;
 
     resolve(chat);
   });
@@ -72,12 +70,12 @@ const getChats = async (id) => {
 
 const getWeekUsers = (start, end, id) => {
   return new Promise(async (resolve) => {
-    const u = await users
+    const u = /* await users
       .find({
         createdAt: { $gte: start, $lt: end },
         clientId: id,
       })
-      .count();
+      .count(); */ 5;
     resolve(u);
   });
 };
@@ -90,11 +88,13 @@ exports.dashboardReport = async (req, res) => {
     .format("YYYY-MM-DD HH:mm:ss");
   const end = moment().endOf("day").format("YYYY-MM-DD HH:mm:ss");
 
-  const bots = await chatbots
-    .find({
+  const bots = await find(
+    "bots",
+    {
       clientId,
-    })
-    .select("botId botName");
+    },
+    "botId botName"
+  );
 
   const data = {};
   data.agentsList = await getAgents(clientId);
@@ -132,11 +132,13 @@ exports.report = async (req, res) => {
   const { clientId } = req;
   const { start, end } = req.body;
 
-  const bots = await chatbots
-    .find({
+  const bots = await find(
+    "bots",
+    {
       clientId,
-    })
-    .select("botId botName");
+    },
+    "botId botName"
+  );
 
   const data = [];
 

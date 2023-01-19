@@ -111,7 +111,9 @@ export const NavNotification = () => {
   const history = useHistory();
 
   useEffect(() => {
-    setNotiCount(rooms.filter((e) => e.agentId === 0).length);
+    setNotiCount(
+      rooms.length > 0 ? rooms.filter((e) => e.agentId === 0).length : 0
+    );
   }, [rooms]);
 
   const handleVisibleChange = (flag) => {

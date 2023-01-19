@@ -1,8 +1,8 @@
-const chats = require("../models/chats");
+const { insert, find } = require("../config/db");
 
 exports.newChat = async (data) => {
   try {
-    const r = new chats(data).save();
+    const r = await insert("chats", data);
   } catch (err) {
     console.log(err);
   }
@@ -10,11 +10,13 @@ exports.newChat = async (data) => {
 
 exports.chats = async (req, res) => {
   const { botId, userId } = req.params;
-  const data = await chats
-    .find({
+  const data = await find(
+    "chats",
+    {
       botId,
       userId,
-    })
-    .select("userId agentId message fromUser");
+    },
+    "userId agentId message fromUser"
+  );
   res.status(200).json({ success: true, data });
 };

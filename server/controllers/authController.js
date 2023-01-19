@@ -1,8 +1,6 @@
-const clients = require("../models/clients");
-const agents = require("../models/agents");
 const messages = require("../helpers/appConstants");
 const jwt = require("jsonwebtoken");
-const { sendMail } = require("../helpers/mailer");
+const { sendMail } = require("../config/mailer");
 const {
   compare,
   hash,
@@ -11,62 +9,77 @@ const {
   resizeImg,
 } = require("../helpers/utils");
 const fs = require("fs");
+const { update, findOne, insert } = require("../config/db");
 let PATH = __dirname.split("\\");
 PATH.pop();
 PATH = PATH.join("/");
 
 const register = async function (req, res) {
-  const email = await agents.findOne({ email: req.body.email });
+  const email = await findOne("agents", { email: req.body.email }, "email");
   if (email)
     return res
       .status(400)
       .json({ success: false, message: messages.emailExists });
 
-  const phone = await agents.findOne({ mobile: req.body.mobile });
+  const phone = await findOne("agents", { mobile: req.body.mobile }, "mobile");
   if (phone)
     return res
       .status(400)
       .json({ success: false, message: messages.phoneExists });
+
+  const cData = {
+    apiKey: (Math.random() + 1).toString(36).substring(2),
+    companyName: req.body?.companyName,
+    address: req.body?.address,
+    city: req.body?.city,
+    pincode: req.body?.pinCode,
+  };
+  const client = await insert("clients", cData);
+
   let hashVal = await hash(req.body.password, parseInt(process.env.JWT_SALT));
-  req.body.password = hashVal;
-  req.body["fullName"] = `${req.body.firstName} ${req.body.lastName}`;
-  req.body["apiKey"] = (Math.random() + 1).toString(36).substring(2);
-  const addClient = new clients(req.body);
-  addClient.save().then(async (result) => {
-    const addAgent = new agents(req.body);
-    addAgent.clientId = result.clientId;
-    addAgent.role = "Admin";
-    addAgent.picture = "default-avatar.png";
-    let agentRes;
-    try {
-      agentRes = await addAgent.save();
-    } catch (err) {
-      return res
-        .status(400)
-        .json({ success: false, message: messages.serverError });
-    }
-    let subject = "Verify email address";
-    let text = "Verify email address";
-    let tokenDetails = await generateToken({ userId: agentRes._id });
-    fs.readFile("html/verifyemail.html", "utf-8", async function (err, data) {
-      let html = data.replace("tokenDetails", `${tokenDetails}`);
-      html = html.replace("SERVER_URL", process.env.SERVER_URL);
-      html = html.replace(/Users/g, req.body.fullName);
-      sendMail({ to: req.body.email, subject, text, html });
-      return res
-        .status(200)
-        .json({ success: true, message: messages.userRegister });
-    });
+
+  const aData = {
+    clientId: client,
+    role: "Admin",
+    firstName: req.body?.firstName,
+    lastName: req.body?.lastName,
+    fullName: `${req.body.firstName} ${req.body.lastName}`,
+    email: req.body?.email,
+    mobile: req.body?.mobile,
+    picture: "",
+    password: hashVal,
+    gender: req.body?.gender || "",
+  };
+
+  let agentRes;
+  try {
+    agentRes = await insert("agents", aData);
+  } catch (err) {
+    return res
+      .status(400)
+      .json({ success: false, message: messages.serverError });
+  }
+  let subject = "Verify email address";
+  let text = "Verify email address";
+  let tokenDetails = await generateToken({ userId: agentRes });
+  fs.readFile("html/verifyemail.html", "utf-8", async function (err, data) {
+    let html = data.replace("tokenDetails", `${tokenDetails}`);
+    html = html.replace("SERVER_URL", process.env.SERVER_URL);
+    html = html.replace(/Users/g, aData.fullName);
+    sendMail({ to: aData.email, subject, text, html });
+    return res
+      .status(200)
+      .json({ success: true, message: messages.userRegister });
   });
 };
 const addAgent = async function (req, res) {
-  const email = await agents.findOne({ email: req.body.email });
+  const email = await findOne("agents", { email: req.body.email }, "email");
   if (email)
     return res
       .status(400)
       .json({ success: false, message: messages.emailExists });
 
-  const phone = await agents.findOne({ mobile: req.body.mobile });
+  const phone = await findOne("agents", { mobile: req.body.mobile }, "mobile");
   if (phone)
     return res
       .status(400)
@@ -75,14 +88,14 @@ const addAgent = async function (req, res) {
   req.body.password = hashVal;
   req.body["fullName"] = `${req.body.firstName} ${req.body.lastName}`;
 
-  const addAgent = new agents(req.body);
+  const agent = req.body;
   const { clientId } = req;
-  addAgent.clientId = clientId;
-  addAgent.role = "User";
-  addAgent.picture = "";
+  agent.clientId = clientId;
+  agent.role = "User";
+  agent.picture = "";
   let agentRes;
   try {
-    agentRes = await addAgent.save();
+    agentRes = await insert("agents", agent);
   } catch (errr) {
     return res
       .status(400)
@@ -90,7 +103,7 @@ const addAgent = async function (req, res) {
   }
   let subject = "Verify email address";
   let text = "Verify email address";
-  let tokenDetails = await generateToken({ userId: agentRes._id });
+  let tokenDetails = await generateToken({ userId: agentRes });
   fs.readFile("html/verifyemail.html", "utf-8", async function (err, data) {
     let html = data.replace("tokenDetails", `${tokenDetails}`);
     html = html.replace("SERVER_URL", process.env.SERVER_URL);
@@ -102,7 +115,7 @@ const addAgent = async function (req, res) {
   });
 };
 const login = async function (req, res) {
-  let Agent = await agents.findOne({ email: req.body.email });
+  let Agent = await findOne("agents", { email: req.body.email });
   if (Agent) {
     if (Agent.isBlock)
       return res
@@ -125,9 +138,11 @@ const login = async function (req, res) {
           expiresIn: "7d",
         }
       );
-      let client = await clients
-        .findOne({ clientId: Agent.clientId })
-        .select("apiKey");
+      let client = await findOne(
+        "clients",
+        { clientId: Agent.clientId },
+        "apiKey"
+      );
       return res.status(200).json({
         success: true,
         message: messages.login,
@@ -154,7 +169,7 @@ const login = async function (req, res) {
   }
 };
 const forgotPassword = async function (req, res) {
-  let Agent = await agents.findOne({ email: req.body.email });
+  let Agent = await findOne("agents", { email: req.body.email });
   if (!Agent)
     return res
       .status(400)
@@ -162,7 +177,7 @@ const forgotPassword = async function (req, res) {
   let random = Math.floor(Math.random() * 1e16);
   let token = jwt.sign(
     {
-      id: Agent._id,
+      id: agentId,
       time: Date.now(),
       forgotToken: random,
     },
@@ -190,7 +205,7 @@ const forgotPassword = async function (req, res) {
 const resetPassword = async function (req, res) {
   let newPassword = req.body.password;
   let token = verifyJwt(req.body.token);
-  let Agent = await agents.findOne({ _id: token.id });
+  let Agent = await findOne("agents", { agentId: token.id });
   let checkPassword = await compare(newPassword, Agent.password);
   if (checkPassword)
     return res.status(400).json({ success: false, message: messages.passErr });
@@ -209,18 +224,17 @@ const resetPassword = async function (req, res) {
     return res
       .status(400)
       .json({ success: false, message: messages.linkexpire });
-  hash(newPassword, parseInt(process.env.JWT_SALT)).then(function (hash) {
-    agents
-      .findOneAndUpdate(
-        { _id: token.id },
-        {
-          password: hash,
-          forgotToken: "",
-        }
-      )
-      .then(
-        res.status(200).json({ success: true, message: messages.passChange })
-      );
+  hash(newPassword, parseInt(process.env.JWT_SALT)).then(async function (hash) {
+    await update(
+      "agents",
+      { agentId: token.id },
+      {
+        password: hash,
+        forgotToken: "",
+      }
+    ).then(
+      res.status(200).json({ success: true, message: messages.passChange })
+    );
   });
 };
 const changePassword = async function (req, res) {
@@ -229,7 +243,7 @@ const changePassword = async function (req, res) {
   if (req.body.oldPass == req.body.newPass)
     return res.status(400).json({ success: false, message: messages.passErr });
 
-  const agent = await agents.findOne({ agentId }).select("password");
+  const agent = await findOne("agents", { agentId }, "password");
 
   const check = await compare(req.body.oldPass, agent.password);
   if (!check)
@@ -238,14 +252,16 @@ const changePassword = async function (req, res) {
       .json({ success: false, message: messages.passMatch });
 
   const hashVal = await hash(req.body.newPass, parseInt(process.env.JWT_SALT));
-  await agents.findOneAndUpdate({ agentId }, { password: hashVal });
+  await update("agents", { agentId }, { password: hashVal });
   return res.status(200).json({ success: true, message: messages.passChange });
 };
 const profileInfo = async function (req, res) {
   const userDetails = req.token;
-  let profile = await agents
-    .findOne({ _id: userDetails._id })
-    .select("firstName lastName email mobile isBlock picture agentId gender");
+  let profile = await findOne(
+    "agents",
+    { agentId: userDetails.agentId },
+    "firstName lastName email mobile isBlock picture agentId gender"
+  );
   res
     .status(200)
     .json({ success: true, data: profile, message: messages.profileFetch });
@@ -265,15 +281,18 @@ const editProfile = async function (req, res) {
   if (req.body?.firstName && req.body?.lastName) {
     req.body["fullName"] = `${req.body.firstName} ${req.body.lastName}`;
   }
-  agents.findOneAndUpdate({ agentId }, req.body).then(async () => {
-    let userDetails = await agents
-      .findOne({ agentId })
-      .select(
-        "agentId firstName lastName fullName picture clientId role gender"
-      );
-    let client = await clients
-      .findOne({ clientId: userDetails.clientId })
-      .select("apiKey");
+  await update("agents", { agentId }, req.body).then(async () => {
+    let userDetails = await findOne(
+      "agents",
+      { agentId },
+      "agentId firstName lastName fullName picture clientId role gender"
+    );
+
+    let client = await findOne(
+      "clients",
+      { clientId: userDetails.clientId },
+      "apiKey"
+    );
     res.status(200).json({
       success: true,
       message: messages.userUpdate,
@@ -294,11 +313,12 @@ const editProfile = async function (req, res) {
 const verifyEmail = async function (req, res) {
   let tokenDetails = await verifyJwt(req.query.token);
   if (tokenDetails) {
-    let userDetails = await agents.findOne({ _id: tokenDetails.userId });
+    let userDetails = await findOne("agents", { agentId: tokenDetails.userId });
     if (userDetails) {
       if (userDetails.isEmailverified == false) {
-        await agents.updateOne(
-          { _id: userDetails._id },
+        await update(
+          "agents",
+          { agentId: userDetails.agentId },
           { isEmailverified: true }
         );
         fs.readFile("html/emailVerified.html", "utf-8", function (err, data) {
@@ -324,7 +344,7 @@ const forgotLinkvalid = async function (req, res) {
   let token = verifyJwt(req.body.token);
   if (token) {
     let id = token.id;
-    let Agent = await agents.findOne({ _id: id });
+    let Agent = await findOne("agents", { agentId: id }, "forgotToken");
     if (Agent) {
       let time = token.time;
       let timeDiff = (new Date() - time) / 60000;

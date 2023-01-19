@@ -1,29 +1,55 @@
-const chatbots = require("../models/chatbots");
-const chats = require("../models/chats");
+const botMenu = require("../models/botMenu");
 const messages = require("../helpers/appConstants");
 const fs = require("fs");
 const { resizeImg } = require("../helpers/utils");
+const {
+  findOne,
+  find,
+  deleteOne,
+  update,
+  insert,
+  db,
+} = require("../config/db");
 const ICON_DEST = "./img/icon/";
 let PATH = __dirname.split("\\");
 PATH.pop();
 PATH = PATH.join("/");
 
+const getLastBotUsed = async (botId) => {
+  return new Promise((resolve) => {
+    db.query(
+      "SELECT createdAt FROM chats WHERE botId = ? ORDER BY chatId DESC LIMIT 1",
+      [botId],
+      (err, result) => {
+        if (err) {
+          resolve(false);
+        } else {
+          resolve(result.length > 0 ? result[0].createdAt : false);
+        }
+      }
+    );
+  });
+};
+
 exports.bots = async (req, res) => {
   const { clientId } = req;
   const data = [];
-  const d = await chatbots
-    .find({
+  const d = await find(
+    "bots",
+    {
       clientId,
-    })
-    .select("botId apiKey botName icon align background liveChat");
+    },
+    "botId apiKey botName icon align background liveChat"
+  );
 
   for (let i = 0; i < d.length; i++) {
-    const chat = await chats
-      .findOne({
-        botId: d[i].botId,
-      })
+    /* const chat = await findOne("chats", {
+      botId: d[i].botId,
+    })
       .sort({ chatId: -1 })
-      .select("createdAt");
+      .select("createdAt"); */
+
+    const chat = await getLastBotUsed(d[i].botId);
 
     data.push({
       botId: d[i].botId,
@@ -33,7 +59,7 @@ exports.bots = async (req, res) => {
       align: d[i].align,
       background: d[i].background,
       apiKey: d[i].apiKey,
-      lastUsed: chat?.createdAt || false,
+      lastUsed: chat,
     });
   }
   res.status(200).json({ success: true, data });
@@ -42,18 +68,20 @@ exports.bots = async (req, res) => {
 exports.botInfo = async (req, res) => {
   const { id } = req.params;
 
-  const data = await chatbots
-    .find({
+  const data = await findOne(
+    "bots",
+    {
       botId: id,
-    })
-    .select("botId botName icon align background liveChat");
-  res.status(200).json({ success: true, data: data[0] || {} });
+    },
+    "botId botName icon align background liveChat"
+  );
+  res.status(200).json({ success: true, data: data || {} });
 };
 
 exports.botMenu = async (req, res) => {
   const { id } = req.params;
 
-  const data = await chatbots
+  const data = await botMenu
     .find({
       botId: id,
     })
@@ -77,11 +105,11 @@ exports.botAdd = async (req, res) => {
     req.body["icon"] = req.file.filename;
   }
 
-  const addBot = new chatbots(req.body);
-  addBot.clientId = clientId;
-  addBot.apiKey = (Math.random() + 1).toString(36).substring(2);
+  const bot = req.body;
+  bot.clientId = clientId;
+  bot.apiKey = (Math.random() + 1).toString(36).substring(2);
   try {
-    await addBot.save();
+    await insert("bots", bot);
     res.status(200).json({
       success: true,
     });
@@ -92,33 +120,43 @@ exports.botAdd = async (req, res) => {
   }
 };
 
-exports.botEdit = (req, res) => {
+exports.botEdit = async (req, res) => {
   const botId = req.body?.botId;
   if (req.file && req.file.path) {
     req.body["icon"] = req.file.filename;
   }
-  chatbots.findOneAndUpdate({ botId }, req.body).then(async () => {
-    res.status(200).json({
-      success: true,
-      message: messages.botUpdate,
-    });
+  await update("bots", { botId }, req.body);
+  res.status(200).json({
+    success: true,
+    message: messages.botUpdate,
   });
 };
 
-exports.botMenuEdit = (req, res) => {
+exports.botMenuEdit = async (req, res) => {
   const botId = req.body?.botId;
   const menu = req.body?.menu;
 
-  chatbots.findOneAndUpdate({ botId }, { menu }).then(async () => {
-    res.status(200).json({
-      success: true,
-      message: messages.botUpdate,
-    });
+  const bot = await botMenu.findOne(
+    {
+      botId,
+    },
+    "menu"
+  );
+
+  if (bot) await botMenu.findOneAndUpdate({ botId }, { menu });
+  else {
+    const newMenu = new botMenu({ botId, menu });
+    newMenu.save();
+  }
+
+  res.status(200).json({
+    success: true,
+    message: messages.botUpdate,
   });
 };
 
 exports.botDelete = async (req, res) => {
   const { botId } = req.params;
-  await chatbots.deleteOne({ botId });
+  await deleteOne("bots", { botId });
   res.status(200).json({ success: true });
 };

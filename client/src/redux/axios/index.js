@@ -36,7 +36,9 @@ export const call = (callback) => {
         reject(data);
       }
     } catch (err) {
-      reject(err.response?.data?.message || "Something went wrong");
+      if (err.response?.data?.message === "Invalid token") {
+        error("Invalid token, please login again");
+      } else reject(err.response?.data?.message || "Something went wrong");
     }
   });
 };
@@ -68,6 +70,7 @@ export const botUpdate = (data) => API.put("/bot/edit", data);
 export const botMenuUpdate = (data) => API.put("/bot/menu/edit", data);
 
 export const getUsers = (data) => API.get("/user/" + data.botId);
+export const getUserInfo = (data) => API.get("/user/info/" + data.userId);
 
 export const getRooms = () => API.get(`/room`);
 export const updateRoom = (data) => API.put("/room/edit", data);

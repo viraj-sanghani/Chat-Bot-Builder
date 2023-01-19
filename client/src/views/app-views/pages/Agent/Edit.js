@@ -112,7 +112,7 @@ const Edit = (props) => {
         history.push({ pathname: "../../agents" });
       }
     } catch (err) {
-      error(err.message);
+      error(err.message || err);
     }
   };
 
@@ -243,8 +243,8 @@ const Edit = (props) => {
                 option.children.toLowerCase().includes(input.toLowerCase())
               }
             >
-              <Option value={false}>Active</Option>
-              <Option value={true}>Block</Option>
+              <Option value={0}>Active</Option>
+              <Option value={1}>Block</Option>
             </Select>
           </Form.Item>
 

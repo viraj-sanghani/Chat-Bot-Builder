@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const messages = require("../helpers/appConstants");
-const agents = require("../models/agents");
 const { verifyJwt } = require("../helpers/utils");
+const { findOne } = require("./../config/db");
 
 const userAuth = async function (req, res, next) {
   const bearer = req.headers["authorization"];
@@ -18,7 +18,7 @@ const userAuth = async function (req, res, next) {
   const verifyToken = verifyJwt(token.trim());
   if (!verifyToken)
     return res.status(401).json({ success: false, message: messages.wrongJwt });
-  const data = await agents.findOne({ agentId: verifyToken.id });
+  const data = await findOne("agents", { agentId: verifyToken.id });
   if (!data)
     return res.status(401).json({ success: false, message: messages.userNot });
   if (data.isBlock == true)

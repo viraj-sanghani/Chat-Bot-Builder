@@ -13,11 +13,12 @@ import {
 import { Scrollbars } from "react-custom-scrollbars";
 import Flex from "components/shared-components/Flex";
 import EllipsisDropdown from "components/shared-components/EllipsisDropdown";
-import { call, getChats } from "redux/axios";
+import { call, getChats, getUserInfo } from "redux/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { AUTH_DATA } from "redux/constants/Auth";
 import { initChat, newChat } from "redux/actions/LiveChat";
 import Utils from "utils";
+import AvatarStatus from "components/shared-components/AvatarStatus";
 
 const Conversation = (props) => {
   const { botId, userId: id } = props;
@@ -32,7 +33,8 @@ const Conversation = (props) => {
   const getConversation = async () => {
     try {
       const res = await call(getChats({ botId, userId: id }));
-      setInfo({ userId: id });
+      const user = await call(getUserInfo({ userId: id }));
+      setInfo({ userId: id, name: user.data?.name });
       dispatch(initChat(res.data));
     } catch (err) {
       console.log(err);
@@ -98,8 +100,13 @@ const Conversation = (props) => {
   return (
     <div className="chat-content">
       <div className="chat-content-header">
-        <h4 className="mb-0">{info.userId}</h4>
-        <div>{/* <EllipsisDropdown menu={menu} /> */}</div>
+        <h4 className="mb-0">
+          <AvatarStatus
+            src="/img/avatars/thumb-2.jpg"
+            name={info?.name || info?.userId}
+          />
+        </h4>
+        <div></div>
       </div>
       <div className="chat-content-body p-0">
         <Scrollbars ref={chatBodyRef} autoHide>

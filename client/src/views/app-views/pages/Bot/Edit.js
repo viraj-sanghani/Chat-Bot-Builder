@@ -45,7 +45,6 @@ const Edit = (props) => {
 
   const onFinish = async (data) => {
     try {
-      console.log(data);
       data.background = background;
       if (picture) {
         data.icon = picture.file;
@@ -196,8 +195,8 @@ const Edit = (props) => {
 
           <Form.Item name="liveChat" label="LiveChat">
             <Radio.Group>
-              <Radio value={true}>Enabled</Radio>
-              <Radio value={false}>Disabled</Radio>
+              <Radio value={1}>Enabled</Radio>
+              <Radio value={0}>Disabled</Radio>
             </Radio.Group>
           </Form.Item>
 

@@ -52,7 +52,7 @@ module.exports = {
   linkexpire: "This link is expired",
   deviceErr: "Account has been login into another device",
   linkValid: "This forgot password link is valid",
-  wrongJwt: "Invalid authorization Token",
+  wrongJwt: "Invalid token",
   wrongAuth: "Invalid authorization format",
   ticketAlready: "Ticket already canceled.",
   ticketCancel:

@@ -304,8 +304,8 @@ window.onload = async () => {
       }, 1500);
     } else {
       if (botDetails?.liveChat) {
-        isLiveChat = true;
         sendMes("Chat With People Online", false);
+        isLiveChat = true;
         createChat("Chat With People Online", "l", false, [
           { val: "No", next: null },
           { val: "Yes", next: null },
@@ -414,7 +414,6 @@ window.onload = async () => {
     });
 
     socket.on("receiveMes", function (data) {
-      console.log(data);
       createChat(data?.mes, "l");
     });
 

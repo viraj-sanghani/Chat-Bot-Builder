@@ -107,7 +107,7 @@ module.exports = class Socket {
           botId: data?.botId,
           userId: data?.userId,
           message: data?.mes,
-          fromUser: data?.fromUser,
+          fromUser: data?.fromUser ? 1 : 0,
         });
         /* io.to(arr).emit("sendMessage", {
           mes: data.mes,
@@ -123,7 +123,7 @@ module.exports = class Socket {
           userId: data?.userId,
           agentId: data?.agentId,
           message: data?.mes,
-          fromUser: data?.fromUser,
+          fromUser: data?.fromUser ? 1 : 0,
         });
 
         const arr = data?.fromUser

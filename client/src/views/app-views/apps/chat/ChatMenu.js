@@ -66,7 +66,7 @@ const ChatMenu = ({ match, location }) => {
             >
               <AvatarStatus
                 src="/img/avatars/thumb-2.jpg"
-                name={item.userId.toString()}
+                name={item?.name || item.userId.toString()}
                 /* subTitle={item.msg[item.msg.length - 1].text} */
               />
               {/* <div className="text-right">

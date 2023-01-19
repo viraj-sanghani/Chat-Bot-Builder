@@ -1,12 +1,12 @@
-const chatbots = require("../../models/chatbots");
-const clients = require("../../models/clients");
+const botMenu = require("../../models/botMenu");
 const message = require("../../helpers/appConstants");
 const { readFileSync } = require("fs");
+const { find, findOne } = require("./../../config/db");
 
 exports.authBot = async (req, res) => {
   const { apiKey } = req.params;
   try {
-    let bot = await chatbots.findOne({ apiKey });
+    let bot = await findOne("bots", { apiKey });
     if (bot) {
       let file = readFileSync("bot/static/js/botAuth.js", "utf8");
       file = file.replace("ALIGN_TO", bot?.align || "right");
@@ -22,20 +22,21 @@ exports.authBot = async (req, res) => {
 exports.botInfo = async (req, res) => {
   const { apiKey } = req.params;
   try {
-    let bot = await chatbots
-      .findOne({ apiKey })
-      .select("botId botName icon align background menu liveChat clientId");
-    let client = await clients
-      .findOne({ clientId: bot.clientId })
-      .select("apiKey");
+    let bot = await findOne(
+      "bots",
+      { apiKey },
+      "botId botName icon align background liveChat clientId"
+    );
+    let menu = await botMenu.findOne({ botId: bot.botId }).select("menu");
+    let client = await findOne("clients", { clientId: bot.clientId }, "apiKey");
 
-    if (bot) {
-      res
-        .status(200)
-        .json({ success: true, data: { bot, apiKey: client.apiKey } });
-    } else {
-      res.json({ success: false, message: "Invalid API Key" });
-    }
+    if (!bot) return res.json({ success: false, message: "Invalid API Key" });
+    if (!menu) return res.json({ success: false, message: "Menu Not Set" });
+
+    res.status(200).json({
+      success: true,
+      data: { bot: { ...bot, menu: menu?.menu || [] }, apiKey: client.apiKey },
+    });
   } catch (err) {
     res.json({ success: false, message: message.serverError });
   }

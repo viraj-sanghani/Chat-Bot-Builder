@@ -1,7 +1,7 @@
-const agents = require("../models/agents");
 const messages = require("../helpers/appConstants");
 const fs = require("fs");
 const { resizeImg } = require("../helpers/utils");
+const { find, findOne, update, deleteOne } = require("../config/db");
 const PICTURE_ORG_DEST = "./img/avatar/";
 const PICTURE_50_DEST = "./img/avatar-50/";
 let PATH = __dirname.split("\\");
@@ -11,36 +11,42 @@ PATH = PATH.join("/");
 exports.agent = async (req, res) => {
   const { agentId } = req.params;
 
-  const data = await agents
-    .findOne({
+  const data = await findOne(
+    "agents",
+    {
       agentId,
-    })
-    .select(
-      "fullName firstName lastName email mobile isBlock picture agentId gender"
-    );
+    },
+    "fullName firstName lastName email mobile isBlock picture agentId gender"
+  );
+
   res.status(200).json({ success: true, data });
 };
 
 exports.agents = async (req, res) => {
   const { clientId } = req;
 
-  const data = await agents
-    .find({
+  const data = await find(
+    "agents",
+    {
       clientId,
-      role: { $not: { $eq: "Admin" } },
-    })
-    .select("fullName email mobile isBlock picture agentId gender");
+      role: "User",
+    },
+    "fullName email mobile isBlock picture agentId gender"
+  );
   res.status(200).json({ success: true, data });
 };
 
 exports.agentsList = async function (req, res) {
   const { clientId } = req;
-  const data = await agents
-    .find({
+  const data = await find(
+    "agents",
+    {
       clientId,
-      role: { $not: { $eq: "Admin" } },
-    })
-    .select("agentId fullName");
+      role: "User",
+    },
+    "agentId fullName"
+  );
+
   res.status(200).json({ success: true, data });
 };
 
@@ -62,8 +68,9 @@ exports.profileImg50 = (req, res) => {
   }
 };
 
-exports.agentEdit = (req, res) => {
+exports.agentEdit = async (req, res) => {
   const agentId = req.body?.id;
+  delete req.body?.id;
   if (req.file && req.file.path) {
     req.body["picture"] = req.file.filename;
     resizeImg(
@@ -77,31 +84,31 @@ exports.agentEdit = (req, res) => {
   if (req.body?.firstName && req.body?.lastName) {
     req.body["fullName"] = `${req.body.firstName} ${req.body.lastName}`;
   }
-  agents.findOneAndUpdate({ agentId }, req.body).then(async () => {
-    let userDetails = await agents
-      .findOne({ agentId })
-      .select(
-        "agentId firstName lastName fullName picture clientId role gender"
-      );
-    res.status(200).json({
-      success: true,
-      message: messages.userUpdate,
-      data: {
-        id: userDetails.agentId,
-        clientId: userDetails.clientId,
-        role: userDetails.role,
-        firstName: userDetails.firstName,
-        lastName: userDetails.lastName,
-        fullName: userDetails.fullName,
-        picture: userDetails.picture,
-        gender: userDetails.gender,
-      },
-    });
+  await update("agents", { agentId }, req.body);
+  let userDetails = await findOne(
+    "agents",
+    { agentId },
+    "agentId firstName lastName fullName picture clientId role gender"
+  );
+
+  res.status(200).json({
+    success: true,
+    message: messages.userUpdate,
+    data: {
+      id: userDetails.agentId,
+      clientId: userDetails.clientId,
+      role: userDetails.role,
+      firstName: userDetails.firstName,
+      lastName: userDetails.lastName,
+      fullName: userDetails.fullName,
+      picture: userDetails.picture,
+      gender: userDetails.gender,
+    },
   });
 };
 
 exports.userDelete = async (req, res) => {
   const { agentId } = req.params;
-  await agents.deleteOne({ agentId });
+  await deleteOne("agents", { agentId });
   res.status(200).json({ success: true });
 };

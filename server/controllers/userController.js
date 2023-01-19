@@ -1,9 +1,8 @@
-const users = require("../models/users");
-
+const { insert, findOne, find } = require("../config/db");
 exports.newUser = async (data) => {
   try {
-    const user = await users.findOne(data);
-    !user && new users(data).save();
+    const user = await findOne("users", data);
+    !user && (await insert("users", data));
   } catch (err) {
     console.log(err);
   }
@@ -11,10 +10,24 @@ exports.newUser = async (data) => {
 
 exports.users = async (req, res) => {
   const { botId } = req.params;
-  const data = await users
-    .find({
+  const data = await find(
+    "users",
+    {
       botId,
-    })
-    .select("userId");
+    },
+    "userId name"
+  );
+  res.status(200).json({ success: true, data });
+};
+
+exports.userInfo = async (req, res) => {
+  const { userId } = req.params;
+  const data = await findOne(
+    "users",
+    {
+      userId,
+    },
+    "userId name email mobile"
+  );
   res.status(200).json({ success: true, data });
 };
