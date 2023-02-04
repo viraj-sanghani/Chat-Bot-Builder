@@ -1,7 +1,10 @@
 const { insert, findOne, find } = require("../config/db");
 exports.newUser = async (data) => {
   try {
-    const user = await findOne("users", data);
+    const user = await findOne("users", {
+      botId: data?.botId,
+      userId: data?.userId,
+    });
     !user && (await insert("users", data));
   } catch (err) {
     console.log(err);

@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: "*" }));
 
 app.get("/", (req, res) => {
+  // console.log(req.headers.origin);
   res.send("Running...");
 });
 

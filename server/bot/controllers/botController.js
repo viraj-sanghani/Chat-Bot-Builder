@@ -25,7 +25,7 @@ exports.botInfo = async (req, res) => {
     let bot = await findOne(
       "bots",
       { apiKey },
-      "botId botName icon align background liveChat clientId"
+      "botId botName icon align background infoForm liveChat clientId"
     );
     let menu = await botMenu.findOne({ botId: bot.botId }).select("menu");
     let client = await findOne("clients", { clientId: bot.clientId }, "apiKey");

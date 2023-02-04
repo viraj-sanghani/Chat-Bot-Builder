@@ -75,7 +75,8 @@ function Report() {
     lastUsed: {
       title: "Last Used",
       dataIndex: "lastUsed",
-      render: (_, record) => record.lastUsed,
+      render: (_, record) =>
+        record?.lastUsed ? moment(record.lastUsed).format("lll") : "Not Used",
     },
   };
 

@@ -1,26 +1,41 @@
 const moment = require("moment");
-const { find } = require("../config/db");
+const { find, db } = require("../config/db");
+
+const execute = async (qry, ...data) => {
+  return new Promise((resolve, reject) => {
+    db.query(qry, data, (err, result) => (err ? reject(err) : resolve(result)));
+  });
+};
 
 const getLivechat = (start, end, id) => {
   return new Promise(async (resolve) => {
-    const chat = /* await find("rooms",{
-        createdAt: { $gte: start, $lt: end },
-        botId: id,
-      }) */ 5;
-
-    resolve(chat);
+    try {
+      const chat = await execute(
+        "SELECT count(roomId) as c FROM rooms WHERE botId = ? AND createdAt between ? and ?",
+        id,
+        start,
+        end
+      );
+      resolve(chat[0].c);
+    } catch (err) {
+      resolve(0);
+    }
   });
 };
 
 const getUsers = (start, end, id) => {
   return new Promise(async (resolve) => {
-    const u = /* await users
-      .find({
-        createdAt: { $gte: start, $lt: end },
-        botId: id,
-      })
-      .count(); */ 5;
-    resolve(u);
+    try {
+      const user = await execute(
+        "SELECT count(userId) as c FROM users WHERE botId = ? AND createdAt between ? and ?",
+        id,
+        start,
+        end
+      );
+      resolve(user[0].c);
+    } catch (err) {
+      resolve(0);
+    }
   });
 };
 
@@ -40,43 +55,31 @@ const getAgents = (id) => {
 
 const getLastUsed = (id) => {
   return new Promise(async (resolve) => {
-    /* const chat = await chats
-      .findOne({
-        botId: id,
-      })
-      .sort({ chatId: -1 })
-      .select("createdAt");
-    resolve(
-      chat?.createdAt ? moment(chat?.createdAt).format("lll") : "Not Used"
-    ); */
-    resolve(moment().format("lll"));
-  });
-};
-
-const getChats = async (id) => {
-  return new Promise(async (resolve) => {
-    const chat = /* await chats.aggregate([
-      {
-        $group: {
-          agentId: { source: "$source", status: "$status" },
-          count: { $sum: 1 },
-        },
-      },
-    ]); */ 5;
-
-    resolve(chat);
+    try {
+      const res = await execute(
+        "SELECT createdAt FROM chats WHERE botId = ? ORDER BY createdAt DESC LIMIT 1",
+        id
+      );
+      resolve(res[0] ? res[0]?.createdAt : false);
+    } catch (err) {
+      resolve(false);
+    }
   });
 };
 
 const getWeekUsers = (start, end, id) => {
   return new Promise(async (resolve) => {
-    const u = /* await users
-      .find({
-        createdAt: { $gte: start, $lt: end },
-        clientId: id,
-      })
-      .count(); */ 5;
-    resolve(u);
+    try {
+      const res = await execute(
+        "SELECT count(userId) as c FROM users WHERE clientId = ? AND createdAt between ? and ? ",
+        id,
+        start,
+        end
+      );
+      resolve(res[0].c);
+    } catch (err) {
+      resolve(0);
+    }
   });
 };
 
@@ -98,7 +101,6 @@ exports.dashboardReport = async (req, res) => {
 
   const data = {};
   data.agentsList = await getAgents(clientId);
-  // data.chats = await getChats(clientId);
   data.weekUsers = {
     date: [],
     val: [],

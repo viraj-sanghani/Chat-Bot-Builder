@@ -14,6 +14,7 @@ window.onload = async () => {
   let userId, botId, agentId, roomId, clientApi;
   let isInit = false;
   let isLiveChat = false;
+  let infoForm = false;
 
   if (!apiKey) {
     return;
@@ -45,6 +46,7 @@ window.onload = async () => {
   }
 
   botId = botDetails.botId;
+  infoForm = botDetails?.infoForm;
   const menu = {};
   let crtId = 0;
   for (let i = 0; i < botDetails.menu.length; i++)
@@ -106,11 +108,11 @@ window.onload = async () => {
                   </div>
                 </div>
 
-                <div class="chat-intro-sec">
+                <div class="chat-intro-sec  ${!infoForm && "d-none"}">
                   <div class="intro-header">
                     <div class="itr-hdr-logo">
                       <img
-                        src="http://localhost:5000/bot/static/icon/1672901622726.jpg"
+                        src="${API_URL}bot/static/icon/${botDetails.icon}"
                         alt=""
                       />
                     </div>
@@ -119,8 +121,12 @@ window.onload = async () => {
                     </p>
                   </div>
                   <div class="intro-form">
-                    <input type="text" name="" id="" placeholder="Name" />
-                    <input type="text" name="" id="" placeholder="Email Id" />
+                    <input type="text" name="" id="custName" placeholder="Name" />
+                    <span id="custNameErr"></span>
+                    <input type="text" name="" id="custEmail" placeholder="Email Id" />
+                    <span id="custEmailErr"></span>
+                    <input type="text" name="" id="custMobile" placeholder="Mobile No" />
+                    <span id="custMobileErr"></span>
                     <button id="startChat">
                       <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
                         <path
@@ -133,10 +139,10 @@ window.onload = async () => {
                   </div>
                 </div>
 
-                <div class="chat-container d-none">
+                <div class="chat-container ${infoForm && "d-none"}">
                   
                 </div>
-                <div class="chat-footer d-none">
+                <div class="chat-footer ${infoForm && "d-none"}">
                   <input
                     type="text"
                     class="chat-text-box"
@@ -169,12 +175,18 @@ window.onload = async () => {
   const chatContainer = document.querySelector(".chat-container");
   const chatFooter = document.querySelector(".chat-footer");
   const mesInput = document.querySelector("#messageChatInput");
+  const custName = document.querySelector("#custName");
+  const custEmail = document.querySelector("#custEmail");
+  const custMobile = document.querySelector("#custMobile");
+  const custNameErr = document.querySelector("#custNameErr");
+  const custEmailErr = document.querySelector("#custEmailErr");
+  const custMobileErr = document.querySelector("#custMobileErr");
   const startChat = document.querySelector("#startChat");
   const sendBtn = document.querySelector("#send");
   const muteBtn = document.querySelector("#mute-btn");
   const unmuteBtn = document.querySelector("#unmute-btn");
   const agentName = document.querySelector(".agent-name");
-  let isMute = false;
+  let isMute = localStorage.getItem("isMute") === "true";
 
   isMute
     ? unmuteBtn.classList.remove("d-none")
@@ -337,6 +349,21 @@ window.onload = async () => {
   };
 
   startChat.addEventListener("click", () => {
+    if (!validate.name(custName.value)) {
+      custName.focus();
+      custNameErr.innerHTML = "Please Enter Valid Name";
+      return;
+    } else custNameErr.innerHTML = "";
+    if (!validate.email(custEmail.value)) {
+      custEmail.focus();
+      custEmailErr.innerHTML = "Please Enter Valid Email Id";
+      return;
+    } else custEmailErr.innerHTML = "";
+    if (!validate.mobile(custMobile.value)) {
+      custMobile.focus();
+      custMobileErr.innerHTML = "Please Enter Valid Mobile No";
+      return;
+    } else custMobileErr.innerHTML = "";
     chatContainer.classList.remove("d-none");
     chatFooter.classList.remove("d-none");
     introSec.classList.add("d-none");
@@ -354,11 +381,13 @@ window.onload = async () => {
   muteBtn.addEventListener("click", () => {
     muteBtn.classList.add("d-none");
     unmuteBtn.classList.remove("d-none");
+    localStorage.setItem("isMute", true);
     isMute = true;
   });
   unmuteBtn.addEventListener("click", () => {
     muteBtn.classList.remove("d-none");
     unmuteBtn.classList.add("d-none");
+    localStorage.setItem("isMute", false);
     isMute = false;
   });
 
@@ -410,7 +439,14 @@ window.onload = async () => {
     socket = io("http://localhost:5000");
 
     socket.on("connect", () => {
-      socket.emit("join", { botId, userId, isAgent: false });
+      socket.emit("join", {
+        botId,
+        userId,
+        name: custName?.value,
+        email: custEmail?.value,
+        mobile: custMobile?.value,
+        isAgent: false,
+      });
     });
 
     socket.on("receiveMes", function (data) {
@@ -481,6 +517,7 @@ window.onload = async () => {
   const openBtn = document.querySelector(".chat-popup-btn-wrap");
 
   const chatPopup = (open = false) => {
+    localStorage.setItem("isOpen", open);
     if (open) {
       openBtn.classList.add("hide-item");
       bot.classList.remove("d-none");
@@ -492,6 +529,11 @@ window.onload = async () => {
       setTimeout(() => {
         openBtn.classList.add("d-none");
         mesInput.focus();
+
+        if (!isInit && !infoForm) {
+          isInit = true;
+          initChat();
+        }
       }, 1000);
     } else {
       openBtn.classList.remove("d-none");
@@ -505,11 +547,6 @@ window.onload = async () => {
         bot.classList.add("d-none");
       }, 1000);
     }
-
-    /* if (!isInit) {
-      isInit = true;
-      initChat();
-    } */
   };
 
   setTimeout(() => {
@@ -517,6 +554,7 @@ window.onload = async () => {
   }, 30);
 
   setTimeout(() => {
-    chatPopup(true);
+    const o = localStorage.getItem("isOpen") === "true";
+    o && chatPopup(true);
   }, 60);
 };

@@ -32,7 +32,7 @@ const ChatMenu = ({ match, location }) => {
       return elm;
     });
     setList(data); */
-    history.push(`${match.url}/${id}`);
+    history.push(`${id}`);
   };
 
   const searchOnChange = (e) => {
@@ -67,6 +67,7 @@ const ChatMenu = ({ match, location }) => {
               <AvatarStatus
                 src="/img/avatars/thumb-2.jpg"
                 name={item?.name || item.userId.toString()}
+                redirect={false}
                 /* subTitle={item.msg[item.msg.length - 1].text} */
               />
               {/* <div className="text-right">

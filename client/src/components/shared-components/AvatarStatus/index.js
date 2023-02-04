@@ -25,8 +25,9 @@ export const AvatarStatus = (props) => {
     gap,
     text,
     onNameClick,
+    redirect = true,
   } = props;
-  return (
+  return redirect ? (
     <div className="avatar-status d-flex align-items-center">
       <Link to={{ pathname: "agent/p/" + id }}>
         {renderAvatar({ icon, src, type, size, shape, gap, text })}
@@ -36,6 +37,15 @@ export const AvatarStatus = (props) => {
           <div className="avatar-status-name clickable">{name}</div>
           <span>{suffix}</span>
         </Link>
+        <div className="text-muted avatar-status-subtitle">{subTitle}</div>
+      </div>
+    </div>
+  ) : (
+    <div className="avatar-status d-flex align-items-center">
+      {renderAvatar({ icon, src, type, size, shape, gap, text })}
+      <div className="ml-3">
+        <div className="avatar-status-name clickable">{name}</div>
+        <span>{suffix}</span>
         <div className="text-muted avatar-status-subtitle">{subTitle}</div>
       </div>
     </div>

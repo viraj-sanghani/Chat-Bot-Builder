@@ -112,6 +112,7 @@ const Edit = (props) => {
           initialValues={{
             botName: bot.botName,
             align: bot.align,
+            infoForm: bot.infoForm,
             liveChat: bot.liveChat,
           }}
         >
@@ -193,7 +194,14 @@ const Edit = (props) => {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item name="liveChat" label="LiveChat">
+          <Form.Item name="infoForm" label="Info Form">
+            <Radio.Group>
+              <Radio value={1}>Enabled</Radio>
+              <Radio value={0}>Disabled</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item name="liveChat" label="Live Chat">
             <Radio.Group>
               <Radio value={1}>Enabled</Radio>
               <Radio value={0}>Disabled</Radio>

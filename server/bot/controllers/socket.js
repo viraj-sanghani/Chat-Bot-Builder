@@ -37,6 +37,9 @@ module.exports = class Socket {
             newUser({
               botId: data?.botId,
               userId: data?.userId,
+              name: data?.name || null,
+              email: data?.email || null,
+              mobile: data?.mobile || null,
             });
             users[data.botId][data.userId] = [];
           }

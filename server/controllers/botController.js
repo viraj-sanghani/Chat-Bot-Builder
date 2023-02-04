@@ -39,7 +39,7 @@ exports.bots = async (req, res) => {
     {
       clientId,
     },
-    "botId apiKey botName icon align background liveChat"
+    "botId apiKey botName icon align background infoForm liveChat"
   );
 
   for (let i = 0; i < d.length; i++) {
@@ -53,6 +53,7 @@ exports.bots = async (req, res) => {
 
     data.push({
       botId: d[i].botId,
+      infoForm: d[i].infoForm,
       liveChat: d[i].liveChat,
       botName: d[i].botName,
       icon: d[i].icon,
@@ -73,7 +74,7 @@ exports.botInfo = async (req, res) => {
     {
       botId: id,
     },
-    "botId botName icon align background liveChat"
+    "botId botName icon align background infoForm liveChat"
   );
   res.status(200).json({ success: true, data: data || {} });
 };
@@ -103,7 +104,7 @@ exports.botAdd = async (req, res) => {
 
   if (req.file && req.file.path) {
     req.body["icon"] = req.file.filename;
-  }
+  } else req.body["icon"] = "default.gif";
 
   const bot = req.body;
   bot.clientId = clientId;
