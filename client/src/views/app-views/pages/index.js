@@ -56,8 +56,8 @@ const Pages = ({ match }) => (
       />
       <Route
         exact
-        path={`${match.url}/bot/edit/menu/:id`}
-        component={lazy(() => import(`./Bot/EditMenu`))}
+        path={`${match.url}/bot/editor/:id`}
+        component={lazy(() => import(`./Bot/Editor`))}
       />
       <Route
         exact

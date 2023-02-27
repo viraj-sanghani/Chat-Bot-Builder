@@ -79,6 +79,15 @@ const Edit = (props) => {
         if (j?.end) {
           m.end = true;
         }
+        if (j?.mainMenu) {
+          m.mainMenu = true;
+        }
+        if (j?.prevMenu) {
+          m.prevMenu = true;
+        }
+        if (j?.liveChat) {
+          m.liveChat = true;
+        }
         if (j?.option) {
           q = m;
           q.opt = [];
@@ -90,6 +99,10 @@ const Edit = (props) => {
         });
       }
     });
+    if (q) {
+      d.menu.push(q);
+      q = null;
+    }
     setJsonData(d);
   };
 

@@ -6,6 +6,15 @@ const botMenu = new Schema(
     menuId: { type: Number, unique: true },
     botId: { type: Number, unique: true },
     menu: {
+      type: Object,
+      default: {
+        key: 1,
+        mes: "Hi",
+        type: "text",
+        next: null,
+      },
+    },
+    attributes: {
       type: Array,
       default: [],
     },

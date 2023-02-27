@@ -1,0 +1,79 @@
+{
+  "mes": "Hi, Welcome!",
+  "type": "text",
+  "key": 1,
+  "next": {
+    "mes": "How are you?",
+    "valid": "any",
+    "type": "question",
+    "save": "email",
+    "key": 2,
+    "next": {
+      "mes": "Connect to live agent",
+      "opt": [
+        {
+          "mes": "Yes",
+          "type": "option",
+          "key": 823831,
+          "next": {
+            "mes": "Test",
+            "opt": [
+              {
+                "mes": "Yes",
+                "type": "option",
+                "key": 823830,
+                "next": {
+                  "mes": "Form with 2 field",
+                  "fields": [
+                    { "title": "Enter Name", "type": "name", "key": 354172 },
+                    {
+                      "title": "Enter Mobile No",
+                      "type": "mobile",
+                      "key": 638830
+                    }
+                  ],
+                  "btnText": "Submit",
+                  "type": "form",
+                  "key": 984953,
+                  "next": {
+                    "mes": "1 image",
+                    "files": [
+                      {
+                        "preview": "blob:http://localhost:3000/a48ae58d-aeb3-4b04-ac07-c11475bc686c",
+                        "name": "Stones-sea-moon-night_5120x2880.jpg"
+                      }
+                    ],
+                    "type": "image",
+                    "key": 70664,
+                    "next": null
+                  }
+                }
+              },
+              {
+                "mes": "No",
+                "type": "option",
+                "key": 824117,
+                "next": null
+              }
+            ],
+            "type": "list",
+            "key": 43429
+          }
+        },
+        {
+          "mes": "No",
+          "type": "option",
+          "key": 824116,
+          "next": {
+            "mes": "https://google.com",
+            "type": "url",
+            "key": 120937,
+            "next": null
+          }
+        }
+      ],
+      "type": "list",
+      "key": 43428
+    }
+  }
+}

@@ -10,6 +10,7 @@ const {
   insert,
   db,
 } = require("../config/db");
+const { widgetItem } = require("../middlewares/multer");
 const ICON_DEST = "./img/icon/";
 let PATH = __dirname.split("\\");
 PATH.pop();
@@ -86,8 +87,12 @@ exports.botMenu = async (req, res) => {
     .find({
       botId: id,
     })
-    .select("menu");
-  res.status(200).json({ success: true, data: data[0]?.menu || {} });
+    .select("menu attributes");
+  res.status(200).json({
+    success: true,
+    data: data[0]?.menu || {},
+    attr: data[0].attributes,
+  });
 };
 
 exports.iconImg = (req, res) => {
@@ -153,6 +158,36 @@ exports.botMenuEdit = async (req, res) => {
   res.status(200).json({
     success: true,
     message: messages.botUpdate,
+  });
+};
+
+exports.botAttrEdit = async (req, res) => {
+  const botId = req.body?.botId;
+  const attributes = req.body?.attr;
+
+  const update = await botMenu.findOneAndUpdate({ botId }, { attributes });
+
+  res.status(200).json({
+    success: true,
+    message: messages.botUpdate,
+  });
+};
+
+exports.uploadWidgetItem = async (req, res) => {
+  widgetItem(req, res, (err) => {
+    if (err) {
+      res.status(400).send({ error: err?.message }).end();
+      return;
+    }
+
+    const files = req.files.map((f) => {
+      return {
+        orgName: f.originalname,
+        name: f.filename,
+      };
+    });
+
+    res.status(200).json({ success: true, files });
   });
 };
 

@@ -89,7 +89,7 @@ function Bot() {
                   />
                 </Tooltip>,
                 <Tooltip placement="top" title="Questions Tree">
-                  <Link to={"./bot/edit/menu/" + ele.botId}>
+                  <Link to={"./bot/editor/" + ele.botId}>
                     <AccountTreeOutlinedIcon key="QuestionsTree" />
                   </Link>
                 </Tooltip>,

@@ -29,14 +29,15 @@ export const call = (callback) => {
         resolve(data);
       } else {
         if (data.message === "Invalid token") {
+          localStorage.removeItem(AUTH_TOKEN);
           error("Invalid token, please login again");
         }
         delete data.success;
-        console.log(data);
         reject(data);
       }
     } catch (err) {
       if (err.response?.data?.message === "Invalid token") {
+        localStorage.removeItem(AUTH_TOKEN);
         error("Invalid token, please login again");
       } else reject(err.response?.data?.message || "Something went wrong");
     }
@@ -68,6 +69,9 @@ export const botInfo = (data) => API.get("/bot/info/" + data.id);
 export const botMenu = (data) => API.get("/bot/menu/" + data.id);
 export const botUpdate = (data) => API.put("/bot/edit", data);
 export const botMenuUpdate = (data) => API.put("/bot/menu/edit", data);
+export const botAttrUpdate = (data) => API.put("/bot/attribute/edit", data);
+export const uploadWidget = (type, id, data) =>
+  API1.post(`/bot/upload/${type}/${id}`, data);
 
 export const getUsers = (data) => API.get("/user/" + data.botId);
 export const getUserInfo = (data) => API.get("/user/info/" + data.userId);

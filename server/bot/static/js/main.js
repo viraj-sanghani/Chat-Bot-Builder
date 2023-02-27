@@ -15,6 +15,8 @@ window.onload = async () => {
   let isInit = false;
   let isLiveChat = false;
   let infoForm = false;
+  let mainMenuStack = [];
+  let prevMenuStack = [];
 
   if (!apiKey) {
     return;
@@ -150,11 +152,66 @@ window.onload = async () => {
                     placeholder="Type your message here"
                     autocomplete="off"
                   />
+                  <input type="text" id="datePicker" autocomplete="off" />
                   <button class="send-btn" id="send">
                     <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
                       <path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
                     </svg>
                   </button>
+                  <div class="ui-timepicker-container d-none">
+                    <div>
+                      <ul class="ui-timepicker-viewport">
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">7:00 AM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">8:00 AM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">9:00 AM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">10:00 AM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">11:00 AM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">12:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">1:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">2:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">3:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">4:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">5:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">6:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">7:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">8:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">9:00 PM</a>
+                        </li>
+                        <li class="ui-menu-item">
+                          <a class="ui-corner-all">10:00 PM</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
                 <div class="pow-wrap">
                   Powerd by
@@ -175,6 +232,8 @@ window.onload = async () => {
   const chatContainer = document.querySelector(".chat-container");
   const chatFooter = document.querySelector(".chat-footer");
   const mesInput = document.querySelector("#messageChatInput");
+  const datePicker = document.querySelector("#datePicker");
+  const timePicker = document.querySelector(".ui-timepicker-container");
   const custName = document.querySelector("#custName");
   const custEmail = document.querySelector("#custEmail");
   const custMobile = document.querySelector("#custMobile");
@@ -192,6 +251,10 @@ window.onload = async () => {
     ? unmuteBtn.classList.remove("d-none")
     : muteBtn.classList.remove("d-none");
   mesInput.disabled = true;
+
+  $(datePicker).datepicker({
+    dateFormat: "yy-mm-dd",
+  });
 
   const createChat = (mes, p = "r", effect = false, options = []) => {
     let chatCon = document.createElement("div");
@@ -239,12 +302,16 @@ window.onload = async () => {
             optionWrap.removeEventListener("click", handleBtnClick);
             optionWrap.remove();
             setTimeout(() => {
-              if (isLiveChat) {
-                mes === "Yes" && initLiveChat(botDetails.botName);
-                mes = "Ok";
-              } else {
-                next(nxt);
-              }
+              if (isLiveChat && mes === "Yes") {
+                initLiveChat(botDetails.botName);
+                return;
+              } else if (nxt === "mainMenu") {
+                nxt = mainMenuStack.pop();
+                next(nxt?.id);
+              } else if (nxt === "prevMenu") {
+                nxt = prevMenuStack.pop();
+                next(nxt?.id);
+              } else next(nxt);
             }, 2000);
           }
         }
@@ -269,7 +336,9 @@ window.onload = async () => {
           }
         }, 100);
       } else {
-        chat.innerHTML = mes;
+        chat.innerHTML = isURL(mes)
+          ? `<a href="${mes}" target="_blank">${mes}</a>`
+          : mes;
         if (p == "l" && menu[crtId]?.wait) {
           mesInput.disabled = false;
           mesInput.focus();
@@ -277,7 +346,7 @@ window.onload = async () => {
           mesInput.disabled = !isLiveChat || !agentId ? true : false;
         }
       }
-    }, 1000);
+    }, 100);
     setTimeout(() => {
       if (!effect && !isMute) {
         p === "r" ? SEND_AUDIO.play() : RECEIVE_AUDIO.play();
@@ -297,7 +366,8 @@ window.onload = async () => {
     initSocket();
     const keys = Object.keys(menu);
     if (keys.length > 0)
-      for (const [key] of keys) {
+      // for (const [key] of keys) {
+      for (const key of keys) {
         if (menu[key]?.start) {
           next(key);
           break;
@@ -309,20 +379,22 @@ window.onload = async () => {
   const next = (id) => {
     if (id) {
       crtId = id;
+      if (menu[crtId]?.mainMenu) {
+        mainMenuStack.push(menu[crtId]);
+      }
+      if (menu[crtId]?.prevMenu) {
+        prevMenuStack.push(menu[crtId]);
+      }
+      if (menu[crtId]?.liveChat) {
+        isLiveChat = true;
+      } else {
+        isLiveChat = false;
+      }
       sendMes(menu[crtId]?.mes, false);
       createChat(menu[crtId]?.mes, "l", false, menu[crtId]?.opt || []);
       setTimeout(() => {
         !menu[crtId]?.wait && next(menu[crtId]?.next);
       }, 1500);
-    } else {
-      if (botDetails?.liveChat) {
-        sendMes("Chat With People Online", false);
-        isLiveChat = true;
-        createChat("Chat With People Online", "l", false, [
-          { val: "No", next: null },
-          { val: "Yes", next: null },
-        ]);
-      }
     }
   };
 
@@ -339,7 +411,7 @@ window.onload = async () => {
         createChat(mesInput.value);
         setTimeout(() => {
           next(menu[crtId]?.next);
-        }, 1500);
+        }, 150);
       } else {
         sendMes(mesInput.value, true);
         createChat(mesInput.value);
@@ -378,6 +450,27 @@ window.onload = async () => {
     e.key == "Enter" && handleSendBtn();
   });
 
+  mesInput.addEventListener("focus", (e) => {
+    setTimeout(() => {
+      if (menu[crtId]?.valid === "date") {
+        datePicker.focus();
+      } else if (menu[crtId]?.valid === "time") {
+        timePicker.classList.remove("d-none");
+      }
+    }, 200);
+  });
+
+  $(document).on("change", "#datePicker", function () {
+    mesInput.value = this.value;
+  });
+
+  $(document).on("click", ".ui-menu-item a", function () {
+    $(".ui-menu-item a").removeClass("ui-state-active");
+    this.classList.add("ui-state-active");
+    mesInput.value = this.innerHTML;
+    timePicker.classList.add("d-none");
+  });
+
   muteBtn.addEventListener("click", () => {
     muteBtn.classList.add("d-none");
     unmuteBtn.classList.remove("d-none");
@@ -390,6 +483,19 @@ window.onload = async () => {
     localStorage.setItem("isMute", false);
     isMute = false;
   });
+
+  function isURL(str) {
+    let pattern = new RegExp(
+      "^(https?:\\/\\/)|(http?:\\/\\/)?" + // protocol
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+        "(\\#[-a-z\\d_]*)?$",
+      "i"
+    );
+    return !!pattern.test(str);
+  }
 
   const isMesValid = (mes, type) => {
     let error;
@@ -404,6 +510,10 @@ window.onload = async () => {
         "Oops, it doesn't look like a valid mobile number. Please try one more time.";
     } else if (type == "number" && !validate.number(mes)) {
       error = "Please enter valid number";
+    } else if (type == "date" && !validate.date(mes)) {
+      error = "Please enter valid date";
+    } else if (type == "time" && !validate.time(mes)) {
+      error = "Please enter valid time";
     }
     error && createChat(error, "l");
     return error ? false : true;
@@ -411,7 +521,7 @@ window.onload = async () => {
 
   const validate = {
     name: (mes) => {
-      let re = /^[a-zA-Z ]{2,30}$/;
+      let re = /^[a-zA-Z]{2,30}$/;
       return re.test(String(mes));
     },
     email: (mes) => {
@@ -425,6 +535,14 @@ window.onload = async () => {
     },
     number: (mes) => {
       let re = /^[0-9]\d{0,}$/;
+      return re.test(String(mes));
+    },
+    date: (mes) => {
+      let re = /^[0-9]\d{3}-[0-9]\d{1}-[0-9]\d{1}$/;
+      return re.test(String(mes));
+    },
+    time: (mes) => {
+      let re = /^[0-9]\d{1}:[0-9]\d{1}\spm|am|PM|AM$/;
       return re.test(String(mes));
     },
   };
@@ -450,7 +568,7 @@ window.onload = async () => {
     });
 
     socket.on("receiveMes", function (data) {
-      createChat(data?.mes, "l");
+      data?.sender !== socket.id && createChat(data?.mes, "l");
     });
 
     socket.on("agentAllocated", function (data) {

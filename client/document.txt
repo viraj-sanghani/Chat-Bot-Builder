@@ -1,0 +1,43 @@
+========== Add ==========
+
+Text 👍
+Question 👍
+List 👍
+Form 👍
+URL 👍
+Attachment 👍
+Image 👍
+Gallery 👍
+Video 👍
+Live Chat 👍
+
+========== Edit ==========
+
+Text 👍
+Question 👍
+List 👍
+Form 👍
+URL 👍
+Attachment 👍
+Image 👍
+Gallery 👍
+Video 👍
+Live Chat 👍
+
+========== Show ==========
+
+Text 
+Question 
+List 
+Form 
+URL 
+Attachment 
+Image 
+Gallery 
+Video 
+Live Chat
+
+========== Pending ==========
+
+Attribute delete
+Move up and down in right side

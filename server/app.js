@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", routes);
 app.use("/bot", botRoutes);
+// app.use("/widget", express.static(__dirname + "/img/widget"));
 
 const server = app.listen(PORT, () => {
   console.log("🚀 - Server running on port :", PORT);
