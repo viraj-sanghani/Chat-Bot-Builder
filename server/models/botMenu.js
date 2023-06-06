@@ -8,10 +8,7 @@ const botMenu = new Schema(
     menu: {
       type: Object,
       default: {
-        key: 1,
-        mes: "Hi",
-        type: "text",
-        next: null,
+        1: { key: 1, mes: "Hi", type: "text", prev: null, next: null },
       },
     },
     attributes: {

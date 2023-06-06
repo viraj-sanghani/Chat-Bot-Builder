@@ -201,12 +201,12 @@ const Edit = (props) => {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item name="liveChat" label="Live Chat">
+          {/* <Form.Item name="liveChat" label="Live Chat">
             <Radio.Group>
               <Radio value={1}>Enabled</Radio>
               <Radio value={0}>Disabled</Radio>
             </Radio.Group>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">

@@ -15,8 +15,6 @@ window.onload = async () => {
   let isInit = false;
   let isLiveChat = false;
   let infoForm = false;
-  let mainMenuStack = [];
-  let prevMenuStack = [];
 
   if (!apiKey) {
     return;
@@ -49,11 +47,20 @@ window.onload = async () => {
 
   botId = botDetails.botId;
   infoForm = botDetails?.infoForm;
+  data = botDetails?.menu || {};
   const menu = {};
   let crtId = 0;
-  for (let i = 0; i < botDetails.menu.length; i++)
+  /* for (let i = 0; i < botDetails.menu.length; i++)
     if (botDetails.menu[i] !== undefined)
-      menu[botDetails.menu[i].id] = botDetails.menu[i];
+      menu[botDetails.menu[i].id] = botDetails.menu[i]; */
+  let key;
+  do {
+    key = data.key;
+    menu[key] = { ...data, next: data?.next?.key || null };
+    data = data?.next || null;
+  } while (data);
+
+  console.log("menu:", menu);
 
   if (
     localStorage.getItem("userId") &&
@@ -93,20 +100,7 @@ window.onload = async () => {
                     <svg id="unmute-btn" class="d-none" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4zM22 9l-6 6M16 9l6 6"/></svg>
                   </div>
                   <div class="bot-close-btn">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#000000"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+                    <span class="mdi mdi-close"></span>
                   </div>
                 </div>
 
@@ -124,18 +118,13 @@ window.onload = async () => {
                   </div>
                   <div class="intro-form">
                     <input type="text" name="" id="custName" placeholder="Name" />
-                    <span id="custNameErr"></span>
+                    <span class="error" id="custNameErr"></span>
                     <input type="text" name="" id="custEmail" placeholder="Email Id" />
-                    <span id="custEmailErr"></span>
+                    <span class="error" id="custEmailErr"></span>
                     <input type="text" name="" id="custMobile" placeholder="Mobile No" />
-                    <span id="custMobileErr"></span>
+                    <span class="error" id="custMobileErr"></span>
                     <button id="startChat">
-                      <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
-                        <path
-                          fill="currentColor"
-                          d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
-                        />
-                      </svg>
+                      <span class="mdi mdi-send"></span>
                       <p>Start Chat</p>
                     </button>
                   </div>
@@ -154,9 +143,7 @@ window.onload = async () => {
                   />
                   <input type="text" id="datePicker" autocomplete="off" />
                   <button class="send-btn" id="send">
-                    <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
-                      <path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
-                    </svg>
+                    <span class="mdi mdi-send"></span>
                   </button>
                   <div class="ui-timepicker-container d-none">
                     <div>
@@ -255,6 +242,8 @@ window.onload = async () => {
   $(datePicker).datepicker({
     dateFormat: "yy-mm-dd",
   });
+
+  /****************  Complate  *****************/
 
   const createChat = (mes, p = "r", effect = false, options = []) => {
     let chatCon = document.createElement("div");
@@ -366,7 +355,6 @@ window.onload = async () => {
     initSocket();
     const keys = Object.keys(menu);
     if (keys.length > 0)
-      // for (const [key] of keys) {
       for (const key of keys) {
         if (menu[key]?.start) {
           next(key);

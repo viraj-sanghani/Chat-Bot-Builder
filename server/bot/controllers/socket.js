@@ -1,4 +1,5 @@
 const { newChat } = require("../../controllers/chatController");
+const { newRes, updateRes } = require("../../controllers/responseController");
 const { newRoom, roomUpdate } = require("../../controllers/roomController");
 const { newUser } = require("../../controllers/userController");
 
@@ -104,23 +105,76 @@ module.exports = class Socket {
           console.log(err);
         }
       });
-      socket.on("newChat", (data) => {
-        // const arr = users[data.botId][data.userId] || [];
+      socket.on("newQues", async (data) => {
+        const arr = users[data?.botId]
+          ? users[data?.botId][data?.userId] || []
+          : [];
+
+        newChat({
+          botId: data?.botId,
+          userId: data?.userId,
+          message: data?.mes,
+          type: data?.type,
+          fromUser: data?.fromUser ? 1 : 0,
+        });
+
+        // testing
+
+        /* const arr1 = agents["dc3zc4nt8f"][1];
+
+        io.to(arr1).emit("receiveMes", {
+          mes: data.mes,
+          sender: socket.id,
+          fromUser: data?.fromUser ? 1 : 0,
+        }); */
+      });
+      socket.on("newChat", async (data) => {
+        if (data.save) {
+          if (data?.resId) {
+            updateRes(data.resId, { [data.save]: data.mes });
+          } else {
+            const resId = await newRes({
+              botId: data.botId,
+              userId: data.userId,
+              values: {
+                [data.save]: data.mes,
+              },
+            });
+            io.to([socket.id]).emit("newResponse", {
+              resId,
+            });
+          }
+        }
+
         newChat({
           botId: data?.botId,
           userId: data?.userId,
           message: data?.mes,
           fromUser: data?.fromUser ? 1 : 0,
         });
-        /* io.to(arr).emit("sendMessage", {
+
+        const arr = users[data?.botId]
+          ? users[data?.botId][data?.userId] || false
+          : false;
+
+        io.to(arr).emit("sendMes", {
           mes: data.mes,
+          next: data.next,
           sender: socket.id,
           fromUser: data?.fromUser,
+        });
+
+        // testing
+
+        /* const arr1 = agents["dc3zc4nt8f"][1];
+
+        io.to(arr1).emit("receiveMes", {
+          mes: data.mes,
+          sender: socket.id,
+          fromUser: data?.fromUser ? 1 : 0,
         }); */
       });
       socket.on("liveChat", (data) => {
-        // const arr = users[data.botId][data.userId] || [];
-
         newChat({
           botId: data?.botId,
           userId: data?.userId,
@@ -128,6 +182,18 @@ module.exports = class Socket {
           message: data?.mes,
           fromUser: data?.fromUser ? 1 : 0,
         });
+
+        if (data?.fromUser) {
+          const arr1 = users[data?.botId]
+            ? users[data?.botId][data?.userId] || false
+            : false;
+
+          io.to(arr1).emit("sendMes", {
+            mes: data.mes,
+            sender: socket.id,
+            fromUser: data?.fromUser,
+          });
+        }
 
         const arr = data?.fromUser
           ? agents[data.apiKey]

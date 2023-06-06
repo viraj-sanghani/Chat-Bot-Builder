@@ -308,7 +308,7 @@ class Utils {
     return `${process.env.REACT_APP_API}/api/agent/picture/50/default-${gender}.png`;
   }
   static botIcon(fileName) {
-    return `${process.env.REACT_APP_API}/api/bot/icon/${fileName}`;
+    return `${process.env.REACT_APP_API}/bot/static/icon/${fileName}`;
   }
 
   static detectURL(message) {

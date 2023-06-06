@@ -2,6 +2,7 @@
   --line-color: #0f3ea3;
   --line-width: 0.1em;
   --gutter: 0.8em;
+  --zoom: 1;
 }
 
 ::-webkit-scrollbar {
@@ -73,7 +74,7 @@
 
 #editor {
   display: flex;
-  background: #f1f2f3;
+  background: rgb(234, 238, 243);
   position: absolute;
   width: 100%;
   left: 0;
@@ -83,23 +84,36 @@
 #editor input {
   height: auto;
 }
-.save-btn {
+.editor-header {
   position: absolute;
   top: 10px;
   right: 20px;
+  width: 300px;
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  z-index: 9;
+}
+.zoom-control {
+  position: relative;
+}
+.zoom-control::before {
+  content: "Zoom";
+  position: absolute;
+  top: -10px;
+}
+.save-btn {
   background: #0f3ea3;
   color: #fff;
   box-shadow: 2px 2px 10px rgb(0 0 0 / 20%);
   border-radius: 5px;
-  z-index: 1;
 }
 .save-btn:hover {
   background: #0f3ea3 !important;
   color: #fff !important;
 }
 .editor-box {
-  padding: 20px;
-  padding-top: 50px;
+  padding: 50px 70px 20px;
   height: calc(100vh - 130px);
   flex-grow: 1;
   overflow: auto;
@@ -109,6 +123,7 @@
   margin: 0 0 calc(var(--gutter) * 2);
   text-align: center;
   margin: 0 auto !important;
+  transform: scale(var(--zoom));
 }
 .tree,
 .tree .tree-ul,
@@ -183,7 +198,7 @@
   position: relative;
   z-index: 1;
   border: 1px solid#fff;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 10px -3px rgb(0 0 0 / 10%);
   text-transform: unset;
 }
 .tree .tree-btn[data-type="text"] {
@@ -230,6 +245,14 @@
   background: #fff;
   color: #000;
 }
+.tree .tree-btn[data-type="jump"] {
+  background: #fff;
+  color: #000;
+}
+.tree .tree-btn[data-type="product"] {
+  background: #fff;
+  color: #000;
+}
 .tree .tree-btn .icon-span {
   line-height: normal;
   padding-right: 10px;
@@ -265,8 +288,14 @@
 .icon-video {
   color: #d40080;
 }
+.icon-product {
+  color: #1752aa;
+}
 .icon-liveChat {
   color: #00ff00;
+}
+.icon-jump {
+  color: #969696;
 }
 
 .tree .selected {
@@ -320,8 +349,14 @@
 .edit-btn svg {
   color: green;
 }
+.copy-btn svg {
+  font-size: 21px;
+}
 .action-btn:hover {
-  background: #fff !important;
+  background: #0f3ea3 !important;
+}
+.action-btn:hover svg {
+  color: #fff !important;
 }
 
 /**********************************
@@ -337,8 +372,9 @@
   color: #af9308;
 }
 .s-con-wid-wrap {
+  background: rgb(234, 238, 243);
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -346,7 +382,8 @@
 }
 .wid-item {
   padding: 15px 0;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%);
   border-radius: 8px;
   text-align: center;
   width: 90px;
@@ -426,6 +463,13 @@
 }
 .model-input-ele {
   width: 49%;
+}
+.p-widget-params {
+  width: calc(100% - 100px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex-grow: 1;
 }
 .model-input-btn-ele {
   width: 49%;

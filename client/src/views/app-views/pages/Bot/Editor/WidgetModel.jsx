@@ -61,9 +61,17 @@ function WidgetModel() {
               <div className="wid-icon">{icons.video}</div>
               <div className="wid-title">Video</div>
             </div>
+            <div className="wid-item" onClick={() => createNewNode("product")}>
+              <div className="wid-icon">{icons.product}</div>
+              <div className="wid-title">Product</div>
+            </div>
             <div className="wid-item" onClick={() => createNewNode("liveChat")}>
               <div className="wid-icon">{icons.liveChat}</div>
               <div className="wid-title">Live Chat</div>
+            </div>
+            <div className="wid-item" onClick={() => createNewNode("jump")}>
+              <div className="wid-icon">{icons.jump}</div>
+              <div className="wid-title">Jump</div>
             </div>
           </div>
         </div>

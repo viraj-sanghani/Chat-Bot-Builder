@@ -1,7 +1,5 @@
 const botMenu = require("../models/botMenu");
 const messages = require("../helpers/appConstants");
-const fs = require("fs");
-const { resizeImg } = require("../helpers/utils");
 const {
   findOne,
   find,
@@ -11,10 +9,6 @@ const {
   db,
 } = require("../config/db");
 const { widgetItem } = require("../middlewares/multer");
-const ICON_DEST = "./img/icon/";
-let PATH = __dirname.split("\\");
-PATH.pop();
-PATH = PATH.join("/");
 
 const getLastBotUsed = async (botId) => {
   return new Promise((resolve) => {
@@ -95,15 +89,6 @@ exports.botMenu = async (req, res) => {
   });
 };
 
-exports.iconImg = (req, res) => {
-  const img = `${ICON_DEST}${req.params.name}`;
-  if (fs.existsSync(img)) {
-    res.sendFile(img, { root: "." });
-  } else {
-    res.sendFile(`${ICON_DEST}default.gif`, { root: "." });
-  }
-};
-
 exports.botAdd = async (req, res) => {
   const { clientId } = req;
 
@@ -115,7 +100,11 @@ exports.botAdd = async (req, res) => {
   bot.clientId = clientId;
   bot.apiKey = (Math.random() + 1).toString(36).substring(2);
   try {
-    await insert("bots", bot);
+    const id = await insert("bots", bot);
+    const menu = new botMenu({
+      botId: id,
+    });
+    menu.save();
     res.status(200).json({
       success: true,
     });

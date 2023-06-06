@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap");
+
+:root {
+  --space: 20px;
+  --chat-bot-bg: #093351;
+  --chat-font-color: #fff;
+  --swiper-theme-color: #fff !important;
+}
+
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  background: #fff;
+  color: #000000;
+  line-height: 1.5;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #89929a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #093351;
+}
+
+.d-none {
+  display: none !important;
+}
+.p-1 {
+  padding: 5px !important;
+}
+.m-1 {
+  margin: 5px !important;
+}
+.m-2 {
+  margin: 10px !important;
+}
+.mt-1 {
+  margin-top: 5px !important;
+}
+.mb-1 {
+  margin-bottom: 5px !important;
+}
+.mr-1 {
+  margin-right: 5px !important;
+}
+.ml-1 {
+  margin-left: 5px !important;
+}
+.mt-2 {
+  margin-top: 10px !important;
+}
+.mt-3 {
+  margin-top: 15px !important;
+}
+.mb-2 {
+  margin-bottom: 10px !important;
+}
+.mr-2 {
+  margin-right: 10px !important;
+}
+.ml-2 {
+  margin-left: 10px !important;
+}
+.w-100 {
+  width: 100% !important;
+}
+.w-75 {
+  width: 75% !important;
+}
+.w-50 {
+  width: 50% !important;
+}
+.w-49 {
+  width: 49% !important;
+}
+.w-25 {
+  width: 25% !important;
+}
+
+button {
+  text-transform: capitalize !important;
+}
+input {
+  outline: none;
+}
+
+.toast-container {
+  width: 100% !important;
+  position: absolute !important;
+  top: 5px !important;
+}
+.Toastify__close-button {
+  color: #000 !important;
+  background: transparent !important;
+}

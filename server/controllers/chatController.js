@@ -1,4 +1,5 @@
 const { insert, find } = require("../config/db");
+const response = require("../models/response");
 
 exports.newChat = async (data) => {
   try {
@@ -16,7 +17,12 @@ exports.chats = async (req, res) => {
       botId,
       userId,
     },
-    "userId agentId message fromUser"
+    "userId agentId type message fromUser createdAt"
   );
-  res.status(200).json({ success: true, data });
+
+  const resp = await response.findOne({ botId, userId }).select("values");
+
+  res
+    .status(200)
+    .json({ success: true, data, attributesData: resp?.values || {} });
 };

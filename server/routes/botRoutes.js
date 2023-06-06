@@ -8,7 +8,6 @@ const {
   botInfo,
   botMenu,
   botDelete,
-  iconImg,
   botAttrEdit,
   uploadWidgetItem,
 } = require("../controllers/botController");
@@ -25,7 +24,5 @@ router.put("/attribute/edit", userAuth, asyncTryCatch(botAttrEdit));
 router.get("/info/:id", userAuth, asyncTryCatch(botInfo));
 router.get("/menu/:id", userAuth, asyncTryCatch(botMenu));
 router.delete("/delete/:botId", userAuth, asyncTryCatch(botDelete));
-router.get("/icon/:name", asyncTryCatch(iconImg));
-router.use("/widget", express.static("img/widget"));
 
 module.exports = router;

@@ -14,7 +14,7 @@ const profileUploads = multer({
 const botIconUploads = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, "img/icon");
+      cb(null, "bot/static/icon");
     },
     filename: (req, file, cb) => {
       cb(null, Date.now() + ".jpg");
@@ -25,10 +25,16 @@ const botIconUploads = multer({
 const widgetItemUploads = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, `img/widget`); // /${req.params.botId}/${req.params.type}
+      cb(null, `bot/static/widget`); // /${req.params.botId}/${req.params.type}
     },
     filename: (req, file, cb) => {
-      cb(null, Date.now() + "." + file.originalname.split(".").pop());
+      cb(
+        null,
+        Date.now() +
+          Math.round(Math.random() * 100000) +
+          "." +
+          file.originalname.split(".").pop()
+      );
     },
   }),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB

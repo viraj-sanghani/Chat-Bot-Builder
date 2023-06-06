@@ -12,18 +12,49 @@ import { editNode, editModel } from "redux/reducers/Tree";
 import { isURL } from "utils/editor";
 import { useDropzone } from "react-dropzone";
 import icons from "utils/icons";
-import { error, warning } from "components/shared-components/Toast/Toast";
+import {
+  error,
+  success,
+  warning,
+} from "components/shared-components/Toast/Toast";
 import { saveAttr } from "redux/actions/Tree";
 import { useParams } from "react-router-dom";
 import { uploadWidget } from "redux/axios";
+import ReactJson from "react-json-view";
+import axios from "axios";
+const sample = {
+  data: [
+    {
+      id: 1,
+      title: "abc",
+      img: "",
+      desc: "",
+      url: "",
+    },
+    {
+      id: 2,
+      title: "def",
+      img: "",
+      desc: "",
+      url: "",
+    },
+    {
+      id: 3,
+      title: "ghi",
+      img: "",
+      desc: "",
+      url: "",
+    },
+  ],
+};
 
 function EditModel() {
   const dispatch = useDispatch();
   const params = useParams();
   const { selected, attributes } = useSelector((state) => state.tree);
   const widgetType = selected?.type;
-  const { mes, valid, btnText } = selected;
-  const [value, setValue] = useState({ mes, valid, btnText });
+  const { mes, valid, btnText, target, url } = selected;
+  const [value, setValue] = useState({ mes, valid, btnText, target, url });
   const [btnList, setBtnList] = useState(
     selected?.opt ? JSON.parse(JSON.stringify(selected?.opt)) : []
   );
@@ -36,6 +67,10 @@ function EditModel() {
   const [fieldList, setFieldList] = useState(
     selected?.fields ? JSON.parse(JSON.stringify(selected?.fields)) : []
   );
+  const [paramsList, setParamsList] = useState(
+    selected?.params ? JSON.parse(JSON.stringify(selected?.params)) : []
+  );
+  const [response, setResponse] = useState(null);
   const dragRef = useRef(null);
   const ansTypes = [
     { val: "any", text: "Anything" },
@@ -98,17 +133,17 @@ function EditModel() {
   const getPreviewImg = (file) => {
     let url;
     if (["image", "gallery"].includes(widgetType)) {
-      url = `${process.env.REACT_APP_API}/api/bot/widget/${file.name}`;
+      url = file.name;
     } else if (widgetType === "video") {
-      url = "/img/video.png";
+      url = "video.png";
     } else if (widgetType === "file") {
       const ext = file.name.split(".").pop();
       if (ext === "xls" || ext === "xlsx") {
-        url = "/img/excel.png";
+        url = "excel.png";
       } else if (ext === "doc" || ext === "docx") {
-        url = "/img/word.png";
+        url = "word.png";
       } else if (ext === "pdf") {
-        url = "/img/pdf.png";
+        url = "pdf.png";
       }
     }
     return url;
@@ -179,7 +214,10 @@ function EditModel() {
 
   const handleAddButton = () => {
     let key = Math.round(Math.random() * 1000000);
-    setBtnList([...btnList, { mes: "", type: "option", key }]);
+    setBtnList([
+      ...btnList,
+      { key, type: "option", mes: "", parent: selected.key },
+    ]);
   };
 
   const removeButton = (index) => {
@@ -188,11 +226,37 @@ function EditModel() {
 
   const handleAddField = () => {
     let key = Math.round(Math.random() * 1000000);
-    setFieldList([...fieldList, { title: "", type: ansTypes[0].val, key }]);
+    setFieldList([...fieldList, { key, type: ansTypes[0].val, title: "" }]);
   };
 
   const handleRemoveField = (index) => {
     setFieldList(fieldList.filter((f, i) => i !== index));
+  };
+
+  const handleVerifyURL = async () => {
+    if (!isURL(value?.url)) {
+      error("Invalid URL");
+      return;
+    }
+    try {
+      let params = {};
+      paramsList.map((item) => {
+        params[item.key] = item.defaultValue;
+      });
+      const res = await axios.get(value.url, { params });
+      const data = res.data;
+      if (
+        /* data?.success &&  */ data?.products &&
+        Array.isArray(data?.products)
+      ) {
+        success("API Verified 🎉");
+        setResponse(data);
+        return;
+      }
+      throw "Invalid Response";
+    } catch (err) {
+      error(err?.message || "Invalid Response");
+    }
   };
 
   const handleSaveWidget = () => {
@@ -218,7 +282,7 @@ function EditModel() {
         dispatch(
           editNode({
             mes: value?.mes,
-            valid: value?.ansType || ansTypes[0].val,
+            valid: value?.valid,
             ...data,
           })
         );
@@ -280,6 +344,19 @@ function EditModel() {
             ...data,
           })
         );
+    } else if (widgetType === "product") {
+      if (isURL(value?.url)) {
+        dispatch(
+          editNode({
+            mes: "Product Slider",
+            url: value?.url,
+            params: paramsList,
+            ...data,
+          })
+        );
+      } else {
+        error("Invalid URL");
+      }
     } else if (widgetType === "liveChat") {
       if (value?.mes) {
         dispatch(
@@ -291,12 +368,42 @@ function EditModel() {
       } else {
         error("Please enter message");
       }
+    } else if (widgetType === "jump") {
+      if (value?.target) {
+        dispatch(
+          editNode({
+            target: value?.target,
+            ...data,
+          })
+        );
+      } else {
+        error("Please enter target key");
+      }
     }
   };
 
   const handleAddAttribute = (val) => {
     saveAttr(dispatch, { botId: params?.id, attr: [...attributes, val] });
     setAttrModelOpen(false);
+  };
+
+  const addParams = () => {
+    setParamsList([...paramsList, { key: "", value: "", defaultValue: "" }]);
+  };
+
+  const setParamsValue = (index, key, val) => {
+    setParamsList(
+      paramsList.map((ele, i) => {
+        if (i === index) {
+          ele[key] = val;
+        }
+        return ele;
+      })
+    );
+  };
+
+  const removeParams = (index) => {
+    setParamsList(paramsList.filter((f, i) => i !== index));
   };
 
   const AttributeModel = ({ setAttrModelOpen, handleAddAttribute }) => {
@@ -386,7 +493,7 @@ function EditModel() {
                 label="Answer Type"
                 size="small"
                 defaultValue={value?.valid}
-                onChange={(e) => setValues(e.target.value, "ansType")}
+                onChange={(e) => setValues(e.target.value, "valid")}
               >
                 {ansTypes.map((t, i) => {
                   return (
@@ -476,11 +583,13 @@ function EditModel() {
                           {icons.close}
                         </div>
                         <a
-                          href={`${process.env.REACT_APP_API}/api/bot/widget/${file.name}`}
+                          href={`${process.env.REACT_APP_API}/bot/static/widget/${file.name}`}
                           target="_blank"
                         >
                           <div className="m-p-img-con">
-                            <img src={file.preview} />
+                            <img
+                              src={`${process.env.REACT_APP_API}/bot/static/widget/${file.preview}`}
+                            />
                           </div>
                         </a>
                         <div className="m-p-img-name">{file.orgName}</div>
@@ -567,6 +676,125 @@ function EditModel() {
               </div>
             </>
           )}
+          {widgetType === "product" && (
+            <div className="model-input-wrap">
+              <TextField
+                multiline
+                rows={3}
+                className="model-input-ele w-100"
+                label="Enter API URL"
+                variant="outlined"
+                size="small"
+                defaultValue={value?.url || ""}
+                onChange={(e) => {
+                  response && setResponse(null);
+                  setValues(e.target.value, "url");
+                }}
+              />
+              <div className="w-100">
+                Note: Response data keys must be same as example response.
+              </div>
+              <div className="w-100">
+                {paramsList.map((item, i) => (
+                  <div
+                    key={i}
+                    className="w-100 d-flex flex-wrap"
+                    style={{ gap: 10, marginBottom: 10 }}
+                  >
+                    <div className="p-widget-params">
+                      <TextField
+                        className=""
+                        label="Enter Parameter Key"
+                        variant="outlined"
+                        size="small"
+                        value={item.key}
+                        onChange={(e) => {
+                          setParamsValue(i, "key", e.target.value);
+                        }}
+                      />
+                      <TextField
+                        className=""
+                        label="Enter Parameter Default Value"
+                        variant="outlined"
+                        size="small"
+                        value={item.defaultValue}
+                        onChange={(e) => {
+                          setParamsValue(i, "defaultValue", e.target.value);
+                        }}
+                      />
+                      <TextField
+                        select
+                        style={{ flexGrow: 1 }}
+                        label="Value From Attribute"
+                        size="small"
+                        value={item.value}
+                        defaultValue={""}
+                        onChange={(e) =>
+                          setParamsValue(i, "value", e.target.value)
+                        }
+                      >
+                        <MenuItem value="">Select Value</MenuItem>
+                        {attributes.map((a, i) => (
+                          <MenuItem value={a} key={i}>
+                            {a}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </div>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={() => removeParams(i)}
+                    >
+                      {icons.close}
+                    </Button>
+                  </div>
+                ))}
+                <Button variant="contained" size="small" onClick={addParams}>
+                  Add Parameter
+                </Button>
+              </div>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handleVerifyURL}
+                color={response ? "success" : "primary"}
+              >
+                {response ? "Verified" : "Verify"}
+              </Button>
+              <div className="d-flex w-100">
+                <div
+                  className="w-50 overflow-auto px-2"
+                  style={{ maxHeight: "100vh" }}
+                >
+                  <h5>Response Example</h5>
+                  <ReactJson
+                    src={sample || {}}
+                    indentWidth={2}
+                    displayDataTypes={false}
+                    collapseStringsAfterLength={true}
+                    collapsed={true}
+                    enableClipboard={false}
+                  />
+                </div>
+                <div style={{ borderLeft: "1px solid lightgray" }}></div>
+                <div
+                  className="w-50 overflow-auto px-2"
+                  style={{ maxHeight: "100vh" }}
+                >
+                  <h5>Your API Response</h5>
+                  <ReactJson
+                    src={response || {}}
+                    indentWidth={2}
+                    displayDataTypes={false}
+                    collapseStringsAfterLength={true}
+                    collapsed={true}
+                    enableClipboard={false}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           {widgetType === "liveChat" && (
             <div className="model-input-wrap">
               <TextField
@@ -578,6 +806,18 @@ function EditModel() {
                 size="small"
                 defaultValue={value?.mes}
                 onChange={(e) => setValues(e.target.value, "mes")}
+              />
+            </div>
+          )}
+          {widgetType === "jump" && (
+            <div className="model-input-wrap">
+              <TextField
+                className="model-input-ele w-100"
+                label="Enter Target key"
+                variant="outlined"
+                size="small"
+                defaultValue={value?.target}
+                onChange={(e) => setValues(e.target.value, "target")}
               />
             </div>
           )}

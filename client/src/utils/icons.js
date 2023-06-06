@@ -16,6 +16,9 @@ import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import SupportAgentOutlinedIcon from "@mui/icons-material/SupportAgentOutlined";
+import ShortcutOutlinedIcon from "@mui/icons-material/ShortcutOutlined";
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 
 const icons = {
   arrowLeft: <KeyboardDoubleArrowLeftOutlinedIcon />,
@@ -36,6 +39,9 @@ const icons = {
   gallery: <CollectionsOutlinedIcon className="icon-gallery" />,
   video: <VideoCameraBackOutlinedIcon className="icon-video" />,
   liveChat: <SupportAgentOutlinedIcon className="icon-liveChat" />,
+  jump: <ShortcutOutlinedIcon className="icon-jump" />,
+  product: <LocalMallOutlinedIcon className="icon-product" />,
+  copy: <ContentCopyOutlinedIcon />,
 };
 
 export default icons;

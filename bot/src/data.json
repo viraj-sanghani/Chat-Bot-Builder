@@ -1,0 +1,801 @@
+{
+  "1": {
+    "key": 1,
+    "type": "text",
+    "mes": "Hi, Welcome to HCS Realtors!",
+    "prev": null,
+    "next": 425082,
+    "save": false
+  },
+  "104": {
+    "key": 104,
+    "mes": "Can I help you with something else?",
+    "opt": [
+      {
+        "key": 685234,
+        "type": "option",
+        "mes": "Go Back to main menu",
+        "parent": 104
+      },
+      {
+        "key": 550691,
+        "type": "option",
+        "mes": "End Chat",
+        "parent": 104
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 276953
+  },
+  "9964": {
+    "key": 9964,
+    "mes": "Kindly entre available time so that we can arrange for a callback. Our working\nhours are 10 am to 7.30 pm IST [Format HH:MM]",
+    "valid": "time",
+    "type": "question",
+    "save": "callbackTime",
+    "next": 109307,
+    "prev": 712015
+  },
+  "21922": {
+    "key": 21922,
+    "mes": "We have the following project according to your choice",
+    "opt": [
+      {
+        "key": 133070,
+        "type": "option",
+        "mes": "HCS Horizon, Mira Road",
+        "parent": 21922,
+        "next": 300530
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 147914
+  },
+  "23225": {
+    "key": 23225,
+    "mes": "Do you have a preferred Location?",
+    "opt": [
+      {
+        "key": 984943,
+        "type": "option",
+        "mes": "Mira Road",
+        "parent": 23225,
+        "next": 782957
+      },
+      {
+        "key": 618163,
+        "type": "option",
+        "mes": "Vasai",
+        "parent": 23225
+      }
+    ],
+    "type": "list",
+    "save": "location",
+    "prev": 691629
+  },
+  "31906": {
+    "key": 31906,
+    "mes": "Thanks for chat with me 😊",
+    "type": "text",
+    "save": false,
+    "prev": 432982,
+    "next": null
+  },
+  "73234": {
+    "key": 73234,
+    "mes": "2 gallery",
+    "files": [
+      {
+        "orgName": "img.jpg",
+        "name": "1678436770909.jpg",
+        "preview": "1678436770909.jpg"
+      },
+      {
+        "orgName": "Stones-sea-moon-night_5120x2880.jpg",
+        "name": "1678436770939.jpg",
+        "preview": "1678436770939.jpg"
+      }
+    ],
+    "type": "gallery",
+    "save": false,
+    "next": 76605,
+    "prev": 300530
+  },
+  "73683": {
+    "key": 73683,
+    "mes": "Your preferred date of Appointment (format: YYYY-MM-DD)",
+    "valid": "date",
+    "type": "question",
+    "save": "appointmentDate",
+    "next": 269932,
+    "prev": 712015
+  },
+  "76605": {
+    "key": 76605,
+    "mes": "Can I help you with something else?",
+    "opt": [
+      {
+        "key": 683713,
+        "type": "option",
+        "mes": "Go to previous menu",
+        "parent": 76605
+      },
+      {
+        "key": 991462,
+        "type": "option",
+        "mes": "Go to main menu",
+        "parent": 76605
+      },
+      {
+        "key": 497189,
+        "type": "option",
+        "mes": "End Chat",
+        "parent": 76605
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 73234
+  },
+  "85118": {
+    "key": 85118,
+    "mes": "3 file",
+    "files": [
+      {
+        "orgName": "pdf.pdf",
+        "name": "1677840372687.pdf",
+        "preview": "pdf.png"
+      },
+      {
+        "orgName": "docx.docx",
+        "name": "1677840372695.docx",
+        "preview": "word.png"
+      },
+      {
+        "orgName": "xlsx.xlsx",
+        "name": "1677840372709.xlsx",
+        "preview": "excel.png"
+      }
+    ],
+    "type": "file",
+    "save": false,
+    "next": null,
+    "prev": 161960
+  },
+  "89006": {
+    "key": 89006,
+    "mes": "Can I help you with something else?",
+    "opt": [
+      {
+        "key": 443264,
+        "type": "option",
+        "mes": "Go to previous menu",
+        "parent": 89006
+      },
+      {
+        "key": 658889,
+        "type": "option",
+        "mes": "Go to main menu",
+        "parent": 89006
+      },
+      {
+        "key": 452208,
+        "type": "option",
+        "mes": "End Chat",
+        "parent": 89006
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 707988
+  },
+  "109307": {
+    "key": 109307,
+    "mes": "Thank you for your interest in HCS Realtors, one of our Sales\nRepresentatives will get back to you shortly or call us on 0987654321",
+    "type": "text",
+    "save": false,
+    "next": 462732,
+    "prev": 9964
+  },
+  "147914": {
+    "key": 147914,
+    "mes": "Do you have a Preferred Budget",
+    "opt": [
+      {
+        "key": 293460,
+        "type": "option",
+        "mes": "60-70 Lacs",
+        "parent": 147914,
+        "next": 21922
+      },
+      {
+        "key": 341841,
+        "type": "option",
+        "mes": "70-80 Lacs",
+        "parent": 147914
+      },
+      {
+        "key": 860905,
+        "type": "option",
+        "mes": "80-90 Lacs",
+        "parent": 147914
+      },
+      {
+        "key": 479642,
+        "type": "option",
+        "mes": "90 Lacs+",
+        "parent": 147914
+      }
+    ],
+    "type": "list",
+    "save": "budget",
+    "prev": 782957
+  },
+  "187751": {
+    "key": 187751,
+    "mes": "Pls wait, agent connect with you asap.",
+    "type": "text",
+    "save": false,
+    "prev": 432982,
+    "next": null
+  },
+  "241332": {
+    "key": 241332,
+    "mes": "Thank you for visiting HCS Realtors",
+    "type": "text",
+    "save": false,
+    "prev": 512738
+  },
+  "269932": {
+    "key": 269932,
+    "mes": "Please fill the time between 11 am to 7.30 pm, and in the format of HH:MM",
+    "valid": "time",
+    "type": "question",
+    "save": "appointmentTime",
+    "next": 512738,
+    "prev": 73683
+  },
+  "276953": {
+    "key": 276953,
+    "mes": "You can also send us your CV to careers@hcsrealtor.com",
+    "type": "text",
+    "save": false,
+    "next": 104,
+    "prev": 425082
+  },
+  "300530": {
+    "key": 300530,
+    "mes": "HCS Horizon, Mira Road",
+    "opt": [
+      {
+        "key": 701158,
+        "type": "option",
+        "mes": "Amenities",
+        "parent": 300530,
+        "next": 73234
+      },
+      {
+        "key": 290054,
+        "type": "option",
+        "mes": "Brochure",
+        "parent": 300530,
+        "next": 435230
+      },
+      {
+        "key": 397550,
+        "type": "option",
+        "mes": "Image Gallery",
+        "parent": 300530,
+        "next": 707988
+      },
+      {
+        "key": 797474,
+        "type": "option",
+        "mes": "Location Map",
+        "parent": 300530,
+        "next": 480277
+      },
+      {
+        "key": 292073,
+        "type": "option",
+        "mes": "Know More",
+        "parent": 300530,
+        "next": 712015
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 21922
+  },
+  "316236": {
+    "key": 316236,
+    "mes": "https://google.com",
+    "type": "url",
+    "save": false,
+    "prev": 161960,
+    "next": 679472
+  },
+  "408502": {
+    "key": 408502,
+    "mes": "Nice to meet you",
+    "type": "text",
+    "save": false,
+    "next": 708752,
+    "prev": 432590
+  },
+  "425082": {
+    "key": 425082,
+    "mes": "This is Priya Here. Happy to assist you today. Kindly Choose",
+    "opt": [
+      {
+        "key": 567109,
+        "type": "option",
+        "mes": "Home owner at Horizon",
+        "parent": 425082,
+        "next": null
+      },
+      {
+        "key": 601118,
+        "type": "option",
+        "mes": "Here to enquire about Project",
+        "parent": 425082,
+        "next": 633150
+      },
+      {
+        "key": 97512,
+        "type": "option",
+        "mes": "Want to explore career options",
+        "parent": 425082,
+        "next": 276953
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 1
+  },
+  "432590": {
+    "key": 432590,
+    "mes": " May I know your Name?",
+    "valid": "name",
+    "type": "question",
+    "save": "name",
+    "next": 408502,
+    "prev": 633150
+  },
+  "432982": {
+    "key": 432982,
+    "type": "liveChat",
+    "mes": "Are you want to connect with live agent?",
+    "opt": [
+      {
+        "key": 479995,
+        "type": "option",
+        "mes": "Yes",
+        "parent": 432982,
+        "next": 187751
+      },
+      {
+        "key": 114267,
+        "type": "option",
+        "mes": "No",
+        "parent": 432982,
+        "next": 31906
+      }
+    ],
+    "save": false,
+    "prev": 679472,
+    "next": null
+  },
+  "435230": {
+    "key": 435230,
+    "mes": "Please Click on the link to view the Brochure",
+    "type": "text",
+    "save": false,
+    "next": 960704,
+    "prev": 300530
+  },
+  "462732": {
+    "key": 462732,
+    "mes": "Can I help you with something else?",
+    "opt": [
+      {
+        "key": 13396,
+        "type": "option",
+        "mes": "Go Back to main menu",
+        "parent": 462732
+      },
+      {
+        "key": 474642,
+        "type": "option",
+        "mes": "End Chat",
+        "parent": 462732
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 109307
+  },
+  "480277": {
+    "key": 480277,
+    "mes": "https://maps.google.com",
+    "type": "url",
+    "save": false,
+    "next": 808250,
+    "prev": 300530
+  },
+  "486722": {
+    "key": 486722,
+    "mes": "And your email",
+    "valid": "email",
+    "type": "question",
+    "save": "email",
+    "next": 525544,
+    "prev": 708752
+  },
+  "505369": {
+    "key": 505369,
+    "mes": "2 image",
+    "files": [
+      {
+        "orgName": "Stones-sea-moon-night_5120x2880.jpg",
+        "name": "1677840348293.jpg",
+        "preview": "1677840348293.jpg"
+      },
+      {
+        "orgName": "img.jpg",
+        "name": "1677840348312.jpg",
+        "preview": "1677840348312.jpg"
+      }
+    ],
+    "type": "image",
+    "save": false,
+    "next": null,
+    "prev": 161960
+  },
+  "512738": {
+    "key": 512738,
+    "mes": "Wonderful! One of our sales team member will call you a day prior to\nconfirm your visit. You can keep our number handy until then 0987654321",
+    "type": "text",
+    "save": false,
+    "next": 241332,
+    "prev": 269932
+  },
+  "525544": {
+    "key": 525544,
+    "mes": "Thank you for your information",
+    "type": "text",
+    "save": false,
+    "next": 863485,
+    "prev": 486722
+  },
+  "541223": {
+    "key": 541223,
+    "mes": "Your preferred date of Appointment (format: YYYY-MM-DD)",
+    "valid": "date",
+    "type": "question",
+    "save": "appointmentDate",
+    "next": 695888,
+    "prev": 712015
+  },
+  "608822": {
+    "key": 608822,
+    "mes": "Wonderful! One of our sales team member will call you a day prior to\nconfirm your visit. You can keep our number handy until then 0987654321",
+    "type": "text",
+    "save": false,
+    "next": 621698,
+    "prev": 695888
+  },
+  "621698": {
+    "key": 621698,
+    "mes": "Thank you for visiting HCS Realtors",
+    "type": "text",
+    "save": false,
+    "prev": 608822
+  },
+  "633150": {
+    "key": 633150,
+    "mes": "Let’s get to know each other better,",
+    "type": "text",
+    "save": false,
+    "prev": 425082,
+    "next": 432590
+  },
+  "658073": {
+    "key": 658073,
+    "mes": "2 video",
+    "files": [
+      {
+        "orgName": "mp4.mp4",
+        "name": "1677840364313.mp4",
+        "preview": "video.png"
+      },
+      {
+        "orgName": "mkv.mkv",
+        "name": "1677840364350.mkv",
+        "preview": "video.png"
+      }
+    ],
+    "type": "video",
+    "save": false,
+    "next": null,
+    "prev": 161960
+  },
+  "679472": {
+    "key": 679472,
+    "type": "form",
+    "mes": "Contact us",
+    "fields": [
+      {
+        "title": "Enter Name",
+        "type": "name",
+        "key": 267527
+      },
+      {
+        "title": "Enter Mobile No",
+        "type": "mobile",
+        "key": 957253
+      },
+      {
+        "title": "Enter Email Id",
+        "type": "email",
+        "key": 75648
+      }
+    ],
+    "btnText": "Submit",
+    "save": false,
+    "prev": 316236,
+    "next": 432982
+  },
+  "691629": {
+    "key": 691629,
+    "mes": "Please Select Menu",
+    "opt": [
+      {
+        "key": 483288,
+        "type": "option",
+        "mes": "Residential",
+        "parent": 691629,
+        "next": 23225
+      },
+      {
+        "key": 996360,
+        "type": "option",
+        "mes": "Commercial",
+        "parent": 691629
+      },
+      {
+        "key": 613366,
+        "type": "option",
+        "mes": "Retail",
+        "parent": 691629
+      }
+    ],
+    "type": "list",
+    "save": "type",
+    "prev": 863485
+  },
+  "695888": {
+    "key": 695888,
+    "mes": "Please fill the time between 11 am to 7.30 pm, and in the format of HH:MM",
+    "valid": "time",
+    "type": "question",
+    "save": "appointmentTime",
+    "next": 608822,
+    "prev": 541223
+  },
+  "707988": {
+    "key": 707988,
+    "mes": "4 gallery",
+    "files": [
+      {
+        "orgName": "1.jpeg",
+        "name": "1678437349801.jpeg",
+        "preview": "1678437349801.jpeg"
+      },
+      {
+        "orgName": "2.jpeg",
+        "name": "1678437349802.jpeg",
+        "preview": "1678437349802.jpeg"
+      },
+      {
+        "orgName": "4.jpeg",
+        "name": "1678437349803.jpeg",
+        "preview": "1678437349803.jpeg"
+      },
+      {
+        "orgName": "3.jpeg",
+        "name": "1678437363907.jpeg",
+        "preview": "1678437363907.jpeg"
+      }
+    ],
+    "type": "gallery",
+    "save": false,
+    "next": 89006,
+    "prev": 300530
+  },
+  "708752": {
+    "key": 708752,
+    "mes": "Can you give us your phone number to stay in touch",
+    "valid": "mobile",
+    "type": "question",
+    "save": "mobile",
+    "next": 486722,
+    "prev": 408502
+  },
+  "712015": {
+    "key": 712015,
+    "mes": "Know More",
+    "opt": [
+      {
+        "key": 799397,
+        "type": "option",
+        "mes": "Schedule a Site visit",
+        "parent": 712015,
+        "next": 541223
+      },
+      {
+        "key": 120204,
+        "type": "option",
+        "mes": "Take a Virtual Meeting",
+        "parent": 712015,
+        "next": 73683
+      },
+      {
+        "key": 954381,
+        "type": "option",
+        "mes": "Talk to us Now",
+        "parent": 712015,
+        "next": 9964
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 300530
+  },
+  "776696": {
+    "key": 776696,
+    "mes": "2 gallery",
+    "files": [
+      {
+        "orgName": "car-with-green-fire.jpg",
+        "name": "1677840354723.jpg",
+        "preview": "1677840354723.jpg"
+      },
+      {
+        "orgName": "car.jpg",
+        "name": "1677840354727.jpg",
+        "preview": "1677840354727.jpg"
+      }
+    ],
+    "type": "gallery",
+    "save": false,
+    "next": null,
+    "prev": 161960
+  },
+  "782957": {
+    "key": 782957,
+    "mes": "Do you have a preferred Configuration?",
+    "opt": [
+      {
+        "key": 97899,
+        "type": "option",
+        "mes": "1 BHK",
+        "parent": 782957
+      },
+      {
+        "key": 939419,
+        "type": "option",
+        "mes": "2 BHK",
+        "parent": 782957,
+        "next": 147914
+      },
+      {
+        "key": 462181,
+        "type": "option",
+        "mes": "3 BHK",
+        "parent": 782957
+      }
+    ],
+    "type": "list",
+    "save": "configuration",
+    "prev": 23225
+  },
+  "808250": {
+    "key": 808250,
+    "mes": "Can I help you with something else?",
+    "opt": [
+      {
+        "key": 495533,
+        "type": "option",
+        "mes": "Go to previous menu",
+        "parent": 808250
+      },
+      {
+        "key": 773387,
+        "type": "option",
+        "mes": "Go to main menu",
+        "parent": 808250
+      },
+      {
+        "key": 939738,
+        "type": "option",
+        "mes": "End Chat",
+        "parent": 808250
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 480277
+  },
+  "863485": {
+    "key": 863485,
+    "mes": "What do you want to do today?",
+    "opt": [
+      {
+        "key": 62131,
+        "type": "option",
+        "mes": "Explore project",
+        "parent": 863485,
+        "next": 691629
+      },
+      {
+        "key": 481353,
+        "type": "option",
+        "mes": "Schedule a Site visit",
+        "parent": 863485
+      },
+      {
+        "key": 19362,
+        "type": "option",
+        "mes": "Take a Virtual Meeting",
+        "parent": 863485
+      },
+      {
+        "key": 713339,
+        "type": "option",
+        "mes": "Talk to us Now",
+        "parent": 863485
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 525544
+  },
+  "921520": {
+    "key": 921520,
+    "mes": "Can I help you with something else?",
+    "opt": [
+      {
+        "key": 501785,
+        "type": "option",
+        "mes": "Go to previous menu",
+        "parent": 921520
+      },
+      {
+        "key": 32543,
+        "type": "option",
+        "mes": "Go to main menu",
+        "parent": 921520
+      },
+      {
+        "key": 213836,
+        "type": "option",
+        "mes": "End Chat",
+        "parent": 921520
+      }
+    ],
+    "type": "list",
+    "save": false,
+    "prev": 960704
+  },
+  "960704": {
+    "key": 960704,
+    "mes": "https://google.com",
+    "type": "url",
+    "save": false,
+    "next": 921520,
+    "prev": 435230
+  }
+}

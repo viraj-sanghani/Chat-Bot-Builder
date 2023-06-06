@@ -27,15 +27,21 @@ exports.botInfo = async (req, res) => {
       { apiKey },
       "botId botName icon align background infoForm liveChat clientId"
     );
-    let menu = await botMenu.findOne({ botId: bot.botId }).select("menu");
+    if (!bot) return res.json({ success: false, message: "Invalid API Key" });
+
+    let d = await botMenu
+      .findOne({ botId: bot.botId })
+      .select("menu attributes");
     let client = await findOne("clients", { clientId: bot.clientId }, "apiKey");
 
-    if (!bot) return res.json({ success: false, message: "Invalid API Key" });
-    if (!menu) return res.json({ success: false, message: "Menu Not Set" });
+    if (!d?.menu) return res.json({ success: false, message: "Menu Not Set" });
 
     res.status(200).json({
       success: true,
-      data: { bot: { ...bot, menu: menu?.menu || [] }, apiKey: client.apiKey },
+      data: {
+        bot: { ...bot, menu: d?.menu || [], attributes: d?.attributes || [] },
+        apiKey: client.apiKey,
+      },
     });
   } catch (err) {
     res.json({ success: false, message: message.serverError });

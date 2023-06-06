@@ -47,6 +47,7 @@ exports.roomUpdate = async (data) => {
     );
     const d = {
       botId: room.botId,
+      roomId: roomId,
       userId: room.userId,
       agentId: room.agentId,
       fullName: agent.fullName,

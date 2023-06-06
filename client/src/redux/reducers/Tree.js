@@ -7,7 +7,6 @@ import {
   getNode,
   moveNodeUp,
   moveNodeDown,
-  getParentkey,
 } from "../../utils/editor";
 
 const initialState = {
@@ -29,35 +28,33 @@ export const treeSlice = createSlice({
       state.attributes = action.payload.attr;
     },
     setSelectedNode: (state, action) => {
-      state.selected = getNode(state.data, action.payload?.key);
+      state.selected = getNode(
+        state.data,
+        action.payload?.key,
+        action.payload?.parent
+      );
     },
     moveHorizontal: (state, action) => {
       state.selected?.key &&
+        state.selected?.parent &&
         (state.data = moveNodeHori(
           state.data,
           state.selected.key,
+          state.selected.parent,
           action.payload
         ));
     },
     moveUp: (state, action) => {
-      if (state.selected?.key) {
-        const key = getParentkey(state.data, state.selected.key);
-        if (key) {
-          state.data = moveNodeUp(state.data, key, action.payload);
-        }
-      }
+      state.selected?.key &&
+        (state.data = moveNodeUp(state.data, state.selected.key));
     },
     moveDown: (state, action) => {
       state.selected?.key &&
-        (state.data = moveNodeDown(
-          state.data,
-          state.selected.key,
-          action.payload
-        ));
+        (state.data = moveNodeDown(state.data, state.selected.key));
     },
     deleteSelected: (state, action) => {
       if (state.selected?.key) {
-        state.data = deleteNode(state.data, state.selected.key);
+        state.data = deleteNode(state.data, state.selected);
         state.selected = {};
       }
     },
@@ -65,11 +62,19 @@ export const treeSlice = createSlice({
       let data = action.payload;
       let key = Math.round(Math.random() * 1000000);
 
+      if (data?.opt) {
+        data.opt = data?.opt.map((e) => {
+          e.parent = key;
+          return e;
+        });
+      }
+
       const newNode = {
-        ...data,
         key,
+        ...data,
       };
-      state.data = addNode(state.data, state.selected.key, newNode);
+
+      state.data = addNode(state.data, newNode, state.selected);
       state.selected = newNode;
       state.addModelOpen = false;
     },
@@ -77,7 +82,11 @@ export const treeSlice = createSlice({
       let data = action.payload;
 
       state.data = updateNode(state.data, state.selected.key, data);
-      state.selected = getNode(state.data, state.selected.key);
+      state.selected = getNode(
+        state.data,
+        state.selected.key,
+        state.selected?.parent
+      );
       state.editModelOpen = false;
     },
     widgetModel: (state, action) => {

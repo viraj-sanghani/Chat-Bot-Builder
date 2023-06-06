@@ -11,6 +11,133 @@
     />
   </head>
   <body>
+    <!-- test start -->
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@7.1.96/css/materialdesignicons.min.css"
+    />
+
+    <div class="chat-popup align-right" style="width: 400px; height: 700px">
+      <div class="chat-header">
+        <div class="img-wrap">
+          <img src="../icon/default.gif" alt="" />
+        </div>
+        <h2>Quick Connect<br /><span class="agent-name"></span></h2>
+        <div class="bot-sound-btn">
+          <span id="mute-btn" class="mdi mdi-volume-high d-none"></span>
+          <span id="unmute-btn" class="mdi mdi-volume-mute d-none"></span>
+        </div>
+        <div class="bot-close-btn">
+          <span class="mdi mdi-close"></span>
+        </div>
+      </div>
+
+      <div class="chat-intro-sec d-none">
+        <div class="intro-header">
+          <div class="itr-hdr-logo">
+            <img src="../icon/default.gif" alt="" />
+          </div>
+          <p class="itr-txt">
+            Please fill out the form below to start chatting.
+          </p>
+        </div>
+        <div class="intro-form">
+          <input type="text" name="" id="custName" placeholder="Name" />
+          <span class="error" id="custNameErr"></span>
+          <input type="text" name="" id="custEmail" placeholder="Email Id" />
+          <span class="error" id="custEmailErr"></span>
+          <input type="text" name="" id="custMobile" placeholder="Mobile No" />
+          <span class="error" id="custMobileErr"></span>
+          <button id="startChat">
+            <span class="mdi mdi-send"></span>
+            <p>Start Chat</p>
+          </button>
+        </div>
+      </div>
+
+      <div class="chat-container"></div>
+      <div class="chat-footer">
+        <input
+          type="text"
+          class="chat-text-box"
+          id="messageChatInput"
+          placeholder="Type your message here"
+          autocomplete="off"
+        />
+        <input type="text" id="datePicker" autocomplete="off" />
+        <button class="send-btn" id="send">
+          <span class="mdi mdi-send"></span>
+        </button>
+        <div class="ui-timepicker-container d-none">
+          <div>
+            <ul class="ui-timepicker-viewport">
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">7:00 AM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">8:00 AM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">9:00 AM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">10:00 AM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">11:00 AM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">12:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">1:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">2:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">3:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">4:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">5:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">6:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">7:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">8:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">9:00 PM</a>
+              </li>
+              <li class="ui-menu-item">
+                <a class="ui-corner-all">10:00 PM</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="pow-wrap">
+        Powerd by
+        <a href="http://localhost:3000" target="blank">QuickConnect</a>
+      </div>
+    </div>
+    <div class="chat-popup-btn-wrap d-none">
+      <div class="chat-popup-btn">
+        <img class="close-popup-icon" src="../icon/default.gif" alt="" />
+      </div>
+    </div>
+
+    <!-- test end -->
+
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"
       integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg=="

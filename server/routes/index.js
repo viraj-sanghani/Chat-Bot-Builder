@@ -1,20 +1,12 @@
 const express = require("express");
 const router = express.Router();
-// const adminRoutes = require("./adminRouter");
-const authRoutes = require("./authRoutes");
-const agentRoutes = require("./agentRoutes");
-const botRoutes = require("./botRoutes");
-const chatRoutes = require("./chatRoutes");
-const userRoutes = require("./userRoutes");
-const roomRoutes = require("./roomRoutes");
-const reportRoutes = require("./reportRoutes");
 
-// router.use("/admin", adminRoutes);
-router.use("/auth", authRoutes);
-router.use("/agent", agentRoutes);
-router.use("/bot", botRoutes);
-router.use("/chat", chatRoutes);
-router.use("/user", userRoutes);
-router.use("/room", roomRoutes);
-router.use("/report", reportRoutes);
+// router.use("/admin", require("./adminRouter"));
+router.use("/auth", require("./authRoutes"));
+router.use("/agent", require("./agentRoutes"));
+router.use("/bot", require("./botRoutes"));
+router.use("/chat", require("./chatRoutes"));
+router.use("/user", require("./userRoutes"));
+router.use("/room", require("./roomRoutes"));
+router.use("/report", require("./reportRoutes"));
 module.exports = router;

@@ -1,43 +1,35 @@
-========== Add ==========
 
 Text 👍
 Question 👍
 List 👍
-Form 👍
 URL 👍
 Attachment 👍
 Image 👍
 Gallery 👍
 Video 👍
 Live Chat 👍
-
-========== Edit ==========
-
-Text 👍
-Question 👍
-List 👍
-Form 👍
-URL 👍
-Attachment 👍
-Image 👍
-Gallery 👍
-Video 👍
-Live Chat 👍
-
-========== Show ==========
-
-Text 
-Question 
-List 
 Form 
-URL 
-Attachment 
-Image 
-Gallery 
-Video 
-Live Chat
+Jump 👍
+Product 👍
+Trigger 
+
 
 ========== Pending ==========
 
 Attribute delete
 Move up and down in right side
+
+========== Bug ==========
+
+same localstorage for diff bot 👍
+
+========== Tasks ==========
+
+Save attribute data 👍
+Save entire chat 👍
+Fetch old chat when page refresh 👍
+Live Chat 👍
+show gallery and other widget when chat load 👍
+show chat time 👍
+Send mail of response
+Form response store

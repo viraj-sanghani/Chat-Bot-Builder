@@ -32,7 +32,7 @@ const ChatMenu = ({ match, location }) => {
       return elm;
     });
     setList(data); */
-    history.push(`${id}`);
+    history.push(`/app/apps/chat/${match.params.botId}/${id}`);
   };
 
   const searchOnChange = (e) => {

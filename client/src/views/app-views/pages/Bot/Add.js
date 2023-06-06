@@ -87,7 +87,7 @@ const Add = () => {
         name="add-bot"
         onFinish={onFinish}
         scrollToFirstError
-        initialValues={{ align: "Right", infoForm: 1, liveChat: 0 }}
+        initialValues={{ align: "Right", infoForm: 1, liveChat: 1 }}
       >
         <Form.Item
           name="botName"
@@ -176,12 +176,12 @@ const Add = () => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name="liveChat" label="Live Chat">
+        {/* <Form.Item name="liveChat" label="Live Chat">
           <Radio.Group>
             <Radio value={1}>Enabled</Radio>
             <Radio value={0}>Disabled</Radio>
           </Radio.Group>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">

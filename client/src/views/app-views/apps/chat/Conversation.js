@@ -52,7 +52,7 @@ const Conversation = (props) => {
 
   const initChatListener = () => {
     socket.on("receiveMes", (data) => {
-      newMes(data.mes, true);
+      newMes(data.mes, data.fromUser);
     });
   };
   const removeChatListener = () => {
@@ -109,7 +109,7 @@ const Conversation = (props) => {
         <div></div>
       </div>
       <div className="chat-content-body p-0">
-        <Scrollbars ref={chatBodyRef} autoHide>
+        <Scrollbars className="test" ref={chatBodyRef} autoHide>
           {messages.length > 0 &&
             messages.map((elm, i) => (
               <div
